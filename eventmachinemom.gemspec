@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Eventmachinemom::VERSION
   spec.authors       = ["Gabriel Poça"]
   spec.email         = ["gabrielpoca@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = "EventMachine Websocket MOM"
+  spec.summary       = "EventMachine Websocket MOM"
   spec.homepage      = ""
   spec.license       = "MIT"
 
