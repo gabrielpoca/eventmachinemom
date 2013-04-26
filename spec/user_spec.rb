@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe EventMachineMOM::User do
 
-  it 'contains instance variables' do
-    EventMachineMOM::User.create "Something"
-    EventMachineMOM::User.all.size.should eql 1
+  it 'stores instance variables' do
+    (1..4).each {|n| EventMachineMOM::User.create("Something #{n}") }
+    EventMachineMOM::User.all.size.should eql 4
   end
 
   it 'saves the right object' do
@@ -14,4 +14,3 @@ describe EventMachineMOM::User do
   end
 
 end
-

@@ -2,4 +2,4 @@
 
 require 'eventmachinemom'
 
-print "something."
+EventMachinMOM::Application.new
