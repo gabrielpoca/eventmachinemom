@@ -6,17 +6,17 @@ module EventMachineMOM
   class Application
 
     def initialize
-      EM.run {
-        @server = EM::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
+      EventMachine.run {
+        @server = EventMachine::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
         ws.onopen { |handshake|
-          puts "WebSocket connection open"
+          puts "Server: WebSocket connection open"
           ws.send "Hello Client, you connected to #{handshake.path}"
         }
 
-        ws.onclose { puts "Connection closed" }
+        ws.onclose { puts "Server: Connection closed" }
 
         ws.onmessage { |msg|
-          puts "Recieved message: #{msg}"
+          puts "Server: Recieved message: #{msg}"
           ws.send "Pong: #{msg}"
         }
         end
