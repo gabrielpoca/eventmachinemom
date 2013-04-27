@@ -1,16 +1,18 @@
 require 'spec_helper'
 
-describe EventMachineMOM::User do
+module EventMachineMOM
+  describe User do
 
-  it 'stores instance variables' do
-    (1..4).each {|n| EventMachineMOM::User.create("Something #{n}") }
-    EventMachineMOM::User.all.size.should eql 4
+    it 'stores instance variables' do
+      (1..4).each {|n| User.create("Something #{n}") }
+      User.all.size.should eql 4
+    end
+
+    it 'saves the right object' do
+      u = User.new "Something"
+      User.create "Something"
+      User.all.last.should == u
+    end
+
   end
-
-  it 'saves the right object' do
-    u = EventMachineMOM::User.new "Something"
-    EventMachineMOM::User.create "Something"
-    EventMachineMOM::User.all.last.should == u
-  end
-
 end

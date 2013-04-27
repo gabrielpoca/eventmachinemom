@@ -23,5 +23,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "websocket"
+  spec.add_development_dependency "event_emitter"
+  spec.add_development_dependency "em-spec"
+  spec.add_development_dependency "em-websocket-client"
   spec.add_dependency 'em-websocket'
 end
