@@ -27,5 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "event_emitter"
   spec.add_development_dependency "em-spec"
   spec.add_development_dependency "em-websocket-client"
+  spec.add_development_dependency "pry"
+  spec.add_development_dependency "pry-debugger"
   spec.add_dependency 'em-websocket'
 end

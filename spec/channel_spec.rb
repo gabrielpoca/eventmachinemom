@@ -6,7 +6,7 @@ module EventMachineMOM
     it 'stores a user' do
       c = Channel.new
       u = User.new "Something"
-      c.add u
+      c.add_user u
       c.contains?(u).should be_true
     end
 
