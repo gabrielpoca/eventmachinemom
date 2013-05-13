@@ -10,6 +10,7 @@ module EventMachineMOM
 
     def initialize handshake
       @handshake = handshake
+      User.logger.debug handshake
     end
 
     def send data

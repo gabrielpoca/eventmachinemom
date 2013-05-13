@@ -1,4 +1,5 @@
 require 'em-websocket'
+require 'json'
 require 'pry'
 require 'pry-debugger'
 require 'logger'
@@ -12,31 +13,33 @@ module EventMachineMOM
     extend BaseLogger
 
     def initialize
-      @thread = Thread.new do
-        EventMachine.run do
-          @server = EventMachine::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
-            ws.onopen do |handshake|
-              User.create handshake
-              Application.logger.debug "WebSocket connection open"
-              ws.send "Hello Client, you connected to #{handshake.path}"
-            end
+      @channel = EM::Channel.new
 
-            ws.onclose do
-              Application.logger.debug "Connection closed"
-            end
+      EventMachine.run do
+        @server = EventMachine::WebSocket.run(:host => "0.0.0.0", :port => 8080) do |ws|
+          ws.onopen do |handshake|
+            User.create handshake
+            Application.logger.debug "WebSocket connection open"
+            ws.send ([["assign_uid", ["1"]]]).to_json
+          end
 
-            ws.onmessage do |msg|
-              Application.logger.debug "Recieved message: #{msg}"
-              ws.send "Pong: #{msg}"
+          ws.onclose do
+            Application.logger.debug "Connection closed"
+          end
+
+          ws.onmessage do |msg|
+            Application.logger.debug "Recieved message: #{msg}"
+            JSON.parse(msg).each do |command|
+              if command[0].eql? "sync"
+                ws.send ([["sync_begin", nil]]).to_json
+                ws.send ([["sync_end", nil]]).to_json
+              elsif command[0].eql? "insert" || "delete" || "undo"
+
+              end
             end
           end
         end
       end
-    end
-
-    def stop
-      @server.stop
-      @thrad.kill
     end
 
   end
