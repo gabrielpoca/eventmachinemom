@@ -1,10 +1,6 @@
 #!/usr/bin/env ruby
 
-begin
-  require 'eventmachinemom'
-rescue LoadError
-  require 'rubygems'
-  require 'eventmachinemom'
-end
+require 'eventmachinemom'
+
 
 EventMachineMOM::Application.new
