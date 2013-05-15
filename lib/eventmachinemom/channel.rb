@@ -1,4 +1,4 @@
-require 'base'
+require 'eventmachinemom/base'
 require 'eventmachinemom/baselogger'
 
 module EventMachineMOM 
