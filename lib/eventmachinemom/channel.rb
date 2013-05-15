@@ -1,5 +1,5 @@
 require 'base'
-require 'baselogger'
+require 'eventmachinemom/baselogger'
 
 module EventMachineMOM 
   class Channel < EM::Channel
