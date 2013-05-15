@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 begin
-  require_relative '../lib/eventmachinemom.rb'
-  #require 'eventmachinemom'
+  require 'eventmachinemom'
 rescue LoadError
   require 'rubygems'
   require 'mygem'
