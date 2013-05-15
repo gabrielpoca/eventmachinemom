@@ -1,12 +1,15 @@
-require_relative 'base'
+require 'base'
+require 'baselogger'
 
-module EventMachineMOM
-  class Channel
+module EventMachineMOM 
+  class Channel < EM::Channel
     extend Base
+    extend BaseLogger
 
     attr_accessor :users
     
     def initialize
+      super
       @users = Array.new
     end
 
@@ -16,10 +19,6 @@ module EventMachineMOM
 
     def contains? user
       @users.include? user
-    end
-
-    def broadcast data
-      @users.each {|user| user.send data}
     end
 
   end

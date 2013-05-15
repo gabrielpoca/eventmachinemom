@@ -1,25 +1,26 @@
-require_relative 'base'
-require_relative 'baselogger'
+require 'base'
+require 'baselogger'
 
 module EventMachineMOM
   class User
     extend Base
     extend BaseLogger
 
-    attr_accessor :handshake
+    attr_accessor :websocket
+    attr_accessor :uid
 
-    def initialize handshake
-      @handshake = handshake
-      User.logger.debug handshake
+    def initialize websocket
+      @websocket = websocket
+      @uid = self.class.get_id
+    end
+
+    def assign_uid
+      send ([["assign_uid", [@uid.to_s]]]).to_json
     end
 
     def send data
-      User.logger.debug data  
+      @websocket.send data  
     end
 
-    def ==(other)
-      return other.handshake.eql? @handshake
-    end
-    
   end
 end

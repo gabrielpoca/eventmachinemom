@@ -7,14 +7,24 @@ module Base
   def self.extended(base)
     class << base
       attr_accessor :instances
+      attr_accessor :id
     end
     base.instances = Array.new
+    base.id = 0
   end
-  def create handshake
-    @instances.push self.new handshake
+
+  def create websocket
+    user = self.new websocket
+    @instances.push user
+    user
   end
+
   def all
     @instances
+  end
+
+  def get_id
+    @id += 1
   end
 end
 
