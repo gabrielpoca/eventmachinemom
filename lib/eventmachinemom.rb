@@ -3,11 +3,13 @@ require 'json'
 require 'pry'
 require 'pry-debugger'
 require 'logger'
+require 'sqlite3'
 
 require 'eventmachinemom/version'
 require 'eventmachinemom/user'
 require 'eventmachinemom/channel'
 require 'eventmachinemom/baselogger'
+require 'eventmachinemom/database'
 
 module EventMachineMOM
   class Application
@@ -19,7 +21,6 @@ module EventMachineMOM
 
       EventMachine.run do
         @server = EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
-
           user = User.create ws
 
           ws.onopen do
@@ -27,7 +28,6 @@ module EventMachineMOM
             user.assign_uid
 
             sid = @channel.subscribe do |msg| 
-              Application.logger.debug "#{user.uid}: Channel received "+msg.inspect
               user.send msg
             end
 
@@ -40,8 +40,9 @@ module EventMachineMOM
             Application.logger.debug "#{user.uid}: Recieved message: #{msg}"
             JSON.parse(msg).each do |command|
               if command[0].eql? "sync"
-                ws.send ([["sync_begin", nil]]).to_json
-                ws.send ([["sync_end", nil]]).to_json
+                user.send ([["sync_begin", nil]]).to_json
+                @channel.log.each { |msg| user.send msg }
+                user.send ([["sync_end", nil]]).to_json
               elsif command[0].eql? "insert" || "delete" || "undo"
                 @channel.push [command].to_json
               end

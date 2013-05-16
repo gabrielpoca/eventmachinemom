@@ -2,7 +2,7 @@ require 'eventmachinemom/base'
 require 'eventmachinemom/baselogger'
 
 module EventMachineMOM
-  class User
+  class User 
     extend Base
     extend BaseLogger
 

@@ -7,10 +7,17 @@ module EventMachineMOM
     extend BaseLogger
 
     attr_accessor :users
+    attr_accessor :log
     
     def initialize
       super
       @users = Array.new
+      @log = Array.new
+    end
+
+    def push *items
+      super *items
+      @log.concat items
     end
 
     def add_user user

@@ -30,4 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "pry-debugger"
   spec.add_dependency 'em-websocket'
+  spec.add_dependency 'sqlite3'
+  spec.add_dependency 'activerecord'
 end

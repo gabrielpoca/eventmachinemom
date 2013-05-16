@@ -8,11 +8,5 @@ module EventMachineMOM
       User.all.size.should eql 4
     end
 
-    it 'saves the right object' do
-      u = User.new "Something"
-      User.create "Something"
-      User.all.last.should == u
-    end
-
   end
 end
