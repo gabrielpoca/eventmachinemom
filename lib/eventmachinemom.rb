@@ -10,6 +10,7 @@ require 'eventmachinemom/user'
 require 'eventmachinemom/channel'
 require 'eventmachinemom/baselogger'
 require 'eventmachinemom/database'
+require 'eventmachinemom/session'
 
 module EventMachineMOM
   class Application

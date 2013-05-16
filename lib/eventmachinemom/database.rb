@@ -1,5 +1,5 @@
 require 'sqlite3'
-require 'activerecord'
+require 'active_record'
 
 # Database is not to be instantiated.
 # It supports one table:
@@ -13,15 +13,16 @@ module EventMachineMOM
       dbconfig = YAML::load(File.open('config/database.yml'))
       ActiveRecord::Base.establish_connection(dbconfig)
 
-      ActiveRecord::Base.execute 
-        'CREATE TABLE IF NOT EXISTS sessions (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name STRING,
-          text STRING
-        );'
+      sql = 'CREATE TABLE IF NOT EXISTS sessions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name STRING,
+      text STRING);'
+
+      st = ActiveRecord::Base.connection.raw_connection.prepare(sql)
+      st.execute
     end
 
     initialize_database
-    
+
   end
 end
