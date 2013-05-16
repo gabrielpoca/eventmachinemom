@@ -1,16 +1,30 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
 require 'eventmachinemom'
+require 'database_cleaner'
 
 thread = nil
 
-RSpec.configure do |c|
-  c.before(:all) do
+RSpec.configure do |config|
+  config.before(:all) do
     thread = Thread.new do
       EventMachineMOM::Application.new
     end
   end
-  c.after(:all) do
+  config.after(:all) do
     thread.kill
+  end
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do
+    DatabaseCleaner.clean
   end
 end
 
