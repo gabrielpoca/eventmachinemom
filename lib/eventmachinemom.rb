@@ -7,10 +7,10 @@ require 'sqlite3'
 
 require 'eventmachinemom/version'
 require 'eventmachinemom/user'
-require 'eventmachinemom/channel'
 require 'eventmachinemom/baselogger'
 require 'eventmachinemom/database'
 require 'eventmachinemom/session'
+require 'eventmachinemom/channel'
 
 module EventMachineMOM
   class Application
@@ -50,7 +50,7 @@ module EventMachineMOM
                 end
 
               elsif command[0].eql? "list"
-                user.send Channel.all.to_json
+                user.send [["list", Channel.all.map(&:name)]].to_json
 
               end
             end

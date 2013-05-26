@@ -14,10 +14,10 @@ module EventMachineMOM
       @name = name
     end
 
-    #def push *items
-      #super *items
-      #items.each { |msg| Session.create name: @name, text: msg }
-    #end
+    def push *items
+      super *items
+      items.each { |msg| Session.create name: @name, text: msg }
+    end
 
     def get_messages
       Session.where name: @name
@@ -26,6 +26,12 @@ module EventMachineMOM
     def self.find_or_create name
       @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create(name)
     end
+
+    def self.initialize_channels
+      Session.uniq.pluck(:name).each { |session| Channel.create session }
+    end
+
+    initialize_channels
 
   end
 end
