@@ -13,10 +13,10 @@ module Base
     base.id = 0
   end
 
-  def create websocket
-    user = self.new websocket
-    @instances.push user
-    user
+  def create name
+    instance = self.new name
+    @instances.push instance
+    instance
   end
 
   def all

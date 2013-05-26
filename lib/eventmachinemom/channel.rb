@@ -14,10 +14,10 @@ module EventMachineMOM
       @name = name
     end
 
-    def push *items
-      super *items
-      items.each { |msg| Session.create name: @name, text: msg }
-    end
+    #def push *items
+      #super *items
+      #items.each { |msg| Session.create name: @name, text: msg }
+    #end
 
     def get_messages
       Session.where name: @name
