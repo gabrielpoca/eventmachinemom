@@ -19,7 +19,8 @@ module EventMachineMOM
     def initialize host = '0.0.0.0', port = 8080
 
       EventMachine.run do
-        @server = EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
+        binding.pry
+        EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
           @user = User.create ws
           @channel = nil
 
@@ -31,27 +32,32 @@ module EventMachineMOM
           ws.onmessage do |msg|
             Application.logger.debug "#{@user.uid}: Recieved message: #{msg}"
             JSON.parse(msg).each do |command|
+
               if command[0].eql? "sync"
                 @user.send ([["sync_begin", nil]]).to_json
                 messages = @channel.get_messages
                 messages.each { |msg| @user.send msg.text } unless messages.nil?
                 @user.send ([["sync_end", nil]]).to_json
 
-              elsif command[0].eql? "insert" || "delete" || "undo"
-                @channel.push [command].to_json
+              elsif ["insert", "delete", "undo"].include? command[0]
+                @channel.push command.to_json
 
               elsif command[0].eql? "join_session"
-
                 @channel = Channel.find_or_create command[1][0]
                 sid = @channel.subscribe {|msg| @user.send msg }
                 ws.onclose { @channel.unsubscribe sid }
 
+              elsif command[0].eql? "list"
+                @user.send Channel.all.to_json
+
               end
             end
           end
-
+          
         end
+        puts "Listening..."
       end
+
     end
 
   end

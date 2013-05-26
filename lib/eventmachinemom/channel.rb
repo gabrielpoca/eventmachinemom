@@ -7,12 +7,10 @@ module EventMachineMOM
     extend Base
     extend BaseLogger
 
-    attr_accessor :users
     attr_accessor :name
     
     def initialize name
       super()
-      @users = Array.new
       @name = name
     end
 
@@ -21,20 +19,12 @@ module EventMachineMOM
       items.each { |msg| Session.create name: @name, text: msg }
     end
 
-    def add_user user
-      @users.push user
-    end
-
-    def contains? user
-      @users.include? user
-    end
-
     def get_messages
       Session.where name: @name
     end
 
     def self.find_or_create name
-      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.new(name)
+      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create(name)
     end
 
   end
