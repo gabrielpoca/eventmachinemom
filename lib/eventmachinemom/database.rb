@@ -14,12 +14,11 @@ module EventMachineMOM
       ActiveRecord::Base.establish_connection(dbconfig)
 
       sql = 'CREATE TABLE IF NOT EXISTS sessions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name STRING,
-      text STRING);'
+      id SERIAL PRIMARY KEY,
+      name VARCHAR,
+      text TEXT);'
 
-      st = ActiveRecord::Base.connection.raw_connection.prepare(sql)
-      st.execute
+      st = ActiveRecord::Base.connection.execute(sql)
     end
 
     initialize_database

@@ -31,6 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-debugger"
   spec.add_development_dependency "database_cleaner"
   spec.add_dependency 'em-websocket'
+  spec.add_dependency 'pg'
+  spec.add_dependency 'activerecord-postgresql-adapter'
   spec.add_dependency 'sqlite3'
   spec.add_dependency 'activerecord'
 end
