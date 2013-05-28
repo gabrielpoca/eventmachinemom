@@ -14,10 +14,6 @@ module EventMachineMOM
       @uid = self.class.get_id
     end
 
-    def assign_uid
-      send ([["assign_uid", [@uid.to_s]]]).to_json
-    end
-
     def send data
       @websocket.send data  
     end

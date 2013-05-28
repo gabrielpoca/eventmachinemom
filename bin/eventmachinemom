@@ -2,5 +2,4 @@
 
 require 'eventmachinemom'
 
-
 EventMachineMOM::Application.new

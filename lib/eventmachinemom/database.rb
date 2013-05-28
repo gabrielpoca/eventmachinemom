@@ -1,4 +1,4 @@
-require 'sqlite3'
+require 'pg'
 require 'active_record'
 
 # Database is not to be instantiated.
@@ -16,7 +16,12 @@ module EventMachineMOM
       sql = 'CREATE TABLE IF NOT EXISTS sessions (
       id SERIAL PRIMARY KEY,
       name VARCHAR,
-      text TEXT);'
+      text TEXT);
+
+      CREATE TABLE IF NOT EXISTS servers (
+      id SERIAL PRIMARY KEY,
+      host VARCHAR,
+      active BOOLEAN);'
 
       st = ActiveRecord::Base.connection.execute(sql)
     end

@@ -13,8 +13,8 @@ module Base
     base.id = 0
   end
 
-  def create name
-    instance = self.new name
+  def create object
+    instance = self.new object
     @instances.push instance
     instance
   end
