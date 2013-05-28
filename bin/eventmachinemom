@@ -2,4 +2,9 @@
 
 require 'eventmachinemom'
 
-EventMachineMOM::Application.new
+binding.pry
+if ARGV[0].eql? "1"
+  EventMachineMOM::Application.new 
+else
+  EventMachineMOM::Application.new '0.0.0.0', 8081, 3001
+end

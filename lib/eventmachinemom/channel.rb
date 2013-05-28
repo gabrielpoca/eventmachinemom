@@ -1,6 +1,6 @@
 require 'eventmachinemom/base'
 require 'eventmachinemom/baselogger'
-require 'eventmachinemom/session'
+require 'eventmachinemom/models/session'
 
 module EventMachineMOM 
   class Channel < EM::Channel

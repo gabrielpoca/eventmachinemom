@@ -10,7 +10,8 @@ require 'eventmachinemom/version'
 require 'eventmachinemom/user'
 require 'eventmachinemom/baselogger'
 require 'eventmachinemom/database'
-require 'eventmachinemom/session'
+require 'eventmachinemom/models/session'
+require 'eventmachinemom/models/server'
 require 'eventmachinemom/channel'
 require 'eventmachinemom/sync_server'
 
@@ -18,8 +19,11 @@ module EventMachineMOM
   class Application
     extend BaseLogger
 
-    def initialize host = '0.0.0.0', port = 8080, monitor = false
+    def initialize host = '0.0.0.0', port = 8080, sync_port = 3000
       EventMachine.run do
+
+        sync = SyncServer.new host, sync_port
+        puts "Listing sync..."
 
         EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
           user = User.create ws
@@ -51,8 +55,7 @@ module EventMachineMOM
         end
         puts "Listening client..."
 
-        SyncServer.new
-        puts "Listing sync..."
+
 
       end
     end
