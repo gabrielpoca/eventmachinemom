@@ -2,7 +2,6 @@
 
 require 'eventmachinemom'
 
-binding.pry
 if ARGV[0].eql? "1"
   EventMachineMOM::Application.new 
 else

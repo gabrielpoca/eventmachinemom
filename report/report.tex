@@ -18,6 +18,10 @@
 
 \documentclass[12pt]{article} % Default font size is 12pt, it can be changed here
 
+\usepackage[portuges]{babel}
+\usepackage[utf8]{inputenc} % Acentuação
+\usepackage{indentfirst}
+
 \usepackage{geometry} % Required to change the page size to A4
 \geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
 
@@ -46,29 +50,27 @@
 
 \center % Center everything on the page
 
-\textsc{\LARGE University Name}\\[1.5cm] % Name of your university/college
-\textsc{\Large Major Heading}\\[0.5cm] % Major heading such as course name
-\textsc{\large Minor Heading}\\[0.5cm] % Minor heading such as course title
+\textsc{\LARGE Universidade do Minho}\\[1.5cm] % Name of your university/college
+\textsc{\Large Sistemas Distribuídos}\\[0.5cm] % Major heading such as course name
+%\textsc{\large Minor Heading}\\[0.5cm] % Minor heading such as course title
 
 \HRule \\[0.4cm]
-{ \huge \bfseries Title}\\[0.4cm] % Title of your document
-\HRule \\[1.5cm]
+{ \huge \bfseries Projecto Integrado}\\[0.1cm] % Title of your document
+{ \small Um sistema de troca de mensagens com Ruby e Websockets }
+\HRule \\[0.8cm]
 
-\begin{minipage}{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Author:}\\
-John \textsc{Smith} % Your name
+\begin{flushleft}
+Gabriel Poça, PG22804 \\
+Rafael Remondes, PG99999
 \end{flushleft}
-\end{minipage}
-~
-\begin{minipage}{0.4\textwidth}
-\begin{flushright} \large
-\emph{Supervisor:} \\
-Dr. James \textsc{Smith} % Supervisor's Name
-\end{flushright}
-\end{minipage}\\[4cm]
+
 
 {\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+\begin{abstract}
+Procura explorar as potencialidades da linguagem Ruby de modo a oferecer
+a clientes web um plataforma de troca de mensagens.
+\end{abstract}
 
 %\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
 
@@ -88,109 +90,13 @@ Dr. James \textsc{Smith} % Supervisor's Name
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
-\section{Introduction} % Major section
-
-Example citation \cite{Figueredo:2009dg}.
-
-%------------------------------------------------
-
-\subsection{Subsection 1} % Sub-section
-
-\lipsum[1] % Dummy text
-
-%------------------------------------------------
-
-\subsection{Subsection 2} % Sub-section
-
-\lipsum[2] % Dummy text
-
-%------------------------------------------------
-
-\subsubsection{Subsubsection 1} % Sub-sub-section
-
-\lipsum[3] % Dummy text
-
-\begin{figure}[H] % Example image
-\center{\includegraphics[width=0.5\linewidth]{placeholder}}
-\caption{Example image.}
-\label{fig:speciation}
-\end{figure}
-
-%------------------------------------------------
-
-\subsubsection{Subsubsection 2} % Sub-sub-section
-
-\lipsum[4] % Dummy text
-
-%----------------------------------------------------------------------------------------
-%	MAJOR SECTION 1
-%----------------------------------------------------------------------------------------
-
-\section{Content Section} % Major section
-
-\lipsum[5] % Dummy text
-
-%------------------------------------------------
-
-\subsection{Subsection 1} % Sub-section
-
-\subsubsection{Subsubsection 1} % Sub-sub-section
-
-\lipsum[6] % Dummy text
-
-%------------------------------------------------
-
-\subsubsection{Subsubsection 2} % Sub-sub-section
-
-\lipsum[6] % Dummy text
-\begin{wrapfigure}{l}{0.4\textwidth} % Inline image example
-  \begin{center}
-    \includegraphics[width=0.38\textwidth]{fish}
-  \end{center}
-  \caption{Fish}
-\end{wrapfigure}
-\lipsum[7-8] % Dummy text
-
-%------------------------------------------------
-
-\subsubsection{Subsubsection 3} % Sub-sub-section
-
-\begin{description} % Numbered list example
-
-\item[First] \hfill \\
-\lipsum[9] % Dummy text
-
-\item[Second] \hfill \\
-\lipsum[10] % Dummy text
-
-\item[Third] \hfill \\
-\lipsum[11] % Dummy text
-
-\end{description} 
-
-%----------------------------------------------------------------------------------------
-%	MAJOR SECTION X - TEMPLATE - UNCOMMENT AND FILL IN
-%----------------------------------------------------------------------------------------
-
-%\section{Content Section}
-
-%\subsection{Subsection 1} % Sub-section
-
-% Content
-
-%------------------------------------------------
-
-%\subsection{Subsection 2} % Sub-section
-
-% Content
+\include{intro}
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
 %----------------------------------------------------------------------------------------
 
-\section{Conclusion} % Major section
-
-\lipsum[12-13]
+\section{Conclusion} 
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
