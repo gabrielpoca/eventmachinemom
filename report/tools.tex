@@ -1,0 +1,48 @@
+\section{Ferramentas}
+
+As próximas secções introduzem ferramentas utilizadas no projecto, desde bibliotecas ruby e javascript a base de dados.
+
+\subsection{Ruby}
+
+Ruby é uma linguagem de programação intrepertada com suporte para diferentes paradigmas (funcional, orientado a objectos e imperativo). Desde o lançamento em 1995 Ruby tem crescido em comunidade e potencial. O seu criador, Yukihiro Matsumoto, pretendia uma linguagem que qualquer programador pudesse aperciar:
+
+``Ruby is simple in appearance, but is very complex inside, just like our human body.'' \cite{matz}
+
+Ruby encontra-se actualmente na versão 2.0.0-p195 no entanto o projecto foi desenvolvido na versão \textbf{2.0.0p0}.
+
+
+\subsubsection{RubyGems}
+
+A aplicação do servidor, em Ruby, encontra-se no formato RubyGem, geralmente denominado por gem. O software RubyGem permite que facilmente se descarregue, instale e manipule gems num sistema.\cite{rubygems} O que se pretende com esta preocupação é permitir que a aplicação possa facilmente ser distribuída e desse modo contribuir para a comunidade Ruby.
+
+Em modo muito básico uma gem é composta pelo seguinte:
+
+\begin{description}
+\item[Gemspec] Ficheiro que identifica as dependência da gem. No caso deste projecto o nome do ficheiro é \textit{eventmachinemom.gemspec}.
+\item[Código da aplicação] Código a executar pela aplicação, encontra-se na pasta \textit{lib}.
+\item[Testes] Testes da aplicação. No caso deste projecto os testes são \textbf{RSpec} e encontram-se na pasta \textit{spec}.
+\item[Excutáveis] Ficheiros executáveis que são instalados no sistema que podem ser invocados pelo utilizador ou outro software. Encontram-se na pasta \textit{bin}.
+\end{description}
+
+
+\subsubsection{EventMachine}
+
+EventMachine é uma biblioteca para Ruby que implementa \textit{event-drive I/O}.
+A biblioteca é utilizada em servidores de eventos; servir clientes assincronos por diferentes protocolos; proxys.
+
+\textbf{EventMachine Websockets}
+
+\subsubsection{ActiveRecord}
+Esta ferramenta é já parte do cliente.
+Active Record é um biblioteca Ruby que establece uma ligação entre classes e tabelas de bases de dados relacionais sem grande configuração. Esta biblioteca uma classe base que quando é extendida establece um mapeamento entre a nova classe e um tabela existente na base de dados. A biblioteca foi desenvolvida inicialmente para a framework Ruby on Rails sendo o base do que se chama models.
+
+É importante referir que o uso desta biblioteca permite que não se escreva SQL de de operações sobre a base de dados à excepção da criação de tabelas sendo esta processo gerado por operações em Ruby.
+
+\subsection{PostgreSQL}
+
+No primeiro esquema conceptual da arquitectura da aplicação planeou-se utilizar SQLite, cada broker teria a sua base de dados e depois haveria sincronização entre todos. 
+
+A primeira abordagem além de complexa não explora o \textbf{controlo de concurrência} que grande parte das base de dados oferece como garantido. Como tal a nova abordagem passa por centralizar a base de dados e todos os servidores trabalham sobre a mesma conseguindo-se sincronização e controlo de concurrência.
+
+\subsection{JQuery}
+
