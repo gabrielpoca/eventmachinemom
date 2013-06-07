@@ -31,11 +31,12 @@ module EventMachineMOM
 
           ws.onopen do
             Application.logger.debug "WebSocket connection open"
+            ws.send user.uid.to_json
           end
 
-          ws.onmessage do |msg|
-            Application.logger.debug "Recieved message: #{msg}"
-            msg = JSON.parse(msg)
+          ws.onmessage do |raw_msg|
+            Application.logger.debug "Recieved message: #{raw_msg}"
+            msg = JSON.parse(raw_msg)
             if msg[0][0] == "unsubscribe"
               channel = Channel.find_or_create(msg[1])
               unless sid[channel.name].nil?
@@ -46,6 +47,7 @@ module EventMachineMOM
               sid[channel.name] = channel.subscribe { |msg| user.send msg }
             else # push to channel and send to other brokers
               Channel.broadcast msg
+              sync.broadcast raw_msg
             end
           end
 

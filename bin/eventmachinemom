@@ -3,6 +3,7 @@
 require 'eventmachinemom'
 
 if ARGV[0].eql? "1"
+  binding.pry
   EventMachineMOM::Application.new 
 else
   EventMachineMOM::Application.new '0.0.0.0', 8081, 3001

@@ -11,7 +11,7 @@ module EventMachineMOM
 
     def initialize websocket
       @websocket = websocket
-      @uid = self.class.get_id
+      @uid = Database.get_next_user_id
     end
 
     def send data

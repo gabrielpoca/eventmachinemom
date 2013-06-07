@@ -23,7 +23,18 @@ module EventMachineMOM
       host VARCHAR,
       active BOOLEAN);'
 
-      st = ActiveRecord::Base.connection.execute(sql)
+      ActiveRecord::Base.connection.execute(sql)
+
+      begin 
+      sequence_sql = 'CREATE SEQUENCE user_id START 1;'
+      ActiveRecord::Base.connection.execute(sequence_sql);
+      rescue Exception => e
+        puts e.message
+      end
+    end
+
+    def self.get_next_user_id
+        ActiveRecord::Base.connection.execute("SELECT nextval('user_id');").first['nextval'].to_i
     end
 
     initialize_database
