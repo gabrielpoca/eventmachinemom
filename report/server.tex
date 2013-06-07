@@ -1,0 +1,9 @@
+\section{Servidor}
+
+\subsection{Padrões de Troca de Mensagens}
+
+[[commands], message]
+
+\subsection{Ciclo de Vida de um Cliente}
+
+Um cliente começa por establecer uma ligação a um dos brokers. Assim que a ligação é establecida o broker envia de volta uma mensagem que contém um identificador único para o cliente. Este identificador serve ao cliente para poder identificar quem envia as mensagens, isto pode ser útil tanto para ignorar as suas próprias mensagens como para descriminar mensagens por clientes. Este método não corrompe eventuais questões de privacidade uma vez que o cliente pode não fazer uso do identificador na troca de mensagens.
