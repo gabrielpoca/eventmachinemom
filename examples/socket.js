@@ -20,8 +20,12 @@ MyWebSocket.prototype._onmessage = function(event) {
     console.log("assigning id "+event.data);
     this._id = event.data;
   } else  {
-    this._count += 1;
-    console.log(event.data);
+    id = event.data.split(":").pop();
+    if(this._id != id) {
+      message = event.data.replace(/:[0-9]+/, "");
+      this._count += 1;
+      console.log(message);
+    }
   }
 }
 
@@ -30,17 +34,21 @@ MyWebSocket.prototype.postCommand = function(command, message) {
   this._socket.send(message);
 }
 
-var my = new MyWebSocket('0.0.0.0', "8080");
+function connect() {
+  var port = $("#port").val();
+  var my_socket = new MyWebSocket('0.0.0.0', port);
 
-setTimeout(function() {
-  for(var i = 0; i < 100; i++) {
-    my.postCommand(["all"], "asd "+i);
-  }
-}, 2000);
+  setTimeout(function() {
+    for(var i = 0; i < 100; i++) {
+      my_socket.postCommand(["all"], "asd "+i);
+    }
+  }, 2000);
 
-setTimeout(function() {
-console.log(my._count);
-}, 6000);
+  setTimeout(function() {
+  console.log(my_socket._count);
+  }, 6000);
+}
+
 //websockets = new Array();
 //[8080, 8080].forEach(function(port) {
   //var websocket = new WebSocket("ws://0.0.0.0:"+port);
