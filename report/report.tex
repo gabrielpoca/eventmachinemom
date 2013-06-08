@@ -26,8 +26,8 @@
 \usepackage[portuges]{babel}
 \usepackage[utf8]{inputenc} % Acentuação
 \usepackage{indentfirst}
-\setlength{\parskip}{\baselineskip} % Space between paragraphs
-
+%\setlength{\parskip}{\baselineskip} % Space between paragraphs
+\usepackage{parskip}% http://ctan.org/pkg/parskip
 
 \usepackage{geometry} % Required to change the page size to A4
 \geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
@@ -106,6 +106,10 @@
 \include{theoretical_intro}
 
 \include{tools}
+
+
+
+\include{server}
 
 %----------------------------------------------------------------------------------------
 %	CONCLUSION
