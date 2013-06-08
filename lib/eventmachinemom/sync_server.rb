@@ -8,6 +8,7 @@ module EventMachineMOM
     attr_accessor :server
 
     def initialize host = '0.0.0.0', port = 3000
+      @servers = Hash.new
       @server = Server.create host: "ws://#{host}:#{port}", active: 1
 
       EventMachine::WebSocket.run(host: host, port: port) do |ws|
@@ -23,28 +24,12 @@ module EventMachineMOM
     end
 
     def broadcast msg
-      @servers.each do |server|
+      @servers.values.each do |server|
         server.send_msg msg
       end
     end
 
     private
-
-    def update_servers inform = false
-      @servers.each { |server| server.close_connection } unless @servers.nil?
-      @servers = Array.new
-
-      Server.where(active: true).select do |server|
-        unless server.eql?(@server) || server.nil?
-          connection = EventMachine::WebSocketClient.connect(server.host)
-          connection.callback do
-            SyncServer.logger.info "Connected to server #{server.id}"
-            @servers.push connection
-            connection.send_msg("update") if inform
-          end
-        end
-      end
-    end
 
     def onopen msg
       SyncServer.logger.info "SyncServer: connection opened"
@@ -56,6 +41,41 @@ module EventMachineMOM
         update_servers
       else
         Channel.broadcast JSON.parse(msg)
+      end
+    end
+
+
+    def update_servers inform = false
+      Server.active.each do |server|
+        if @servers.keys.include? server.id
+          next
+        end
+
+        if @server.host.eql?(server.host) 
+          if !@server.id.eql?(server.id)
+            SyncServer.logger.info "Old entry in database id: #{server.id} host: #{server.host}, removing..."
+            server.update_attributes!(active: false)
+            @servers.delete server.id
+          end
+          next
+        end
+
+        connection = EventMachine::WebSocketClient.connect(server.host)
+        connection.callback do
+          SyncServer.logger.info "Connected to server #{server.id}: #{server.host}"
+          @servers[server.id] = connection
+          connection.send_msg("update") if inform
+        end
+
+        connection.errback do |error|
+          SyncServer.logger.info "error from server #{server.id}"
+        end
+
+        connection.disconnect do |error|
+          SyncServer.logger.info "server #{server.id} disconnected"
+          server.update_attributes!(active: false)
+          @servers.delete server.id
+        end
       end
     end
 

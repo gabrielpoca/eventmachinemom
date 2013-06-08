@@ -57,8 +57,6 @@ module EventMachineMOM
         end
         puts "Listening client..."
 
-
-
       end
     end
 
