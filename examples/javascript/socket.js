@@ -34,19 +34,47 @@ MyWebSocket.prototype.postCommand = function(command, message) {
   this._socket.send(message);
 }
 
+var my_socket = null;
+
+function get_count() {
+  console.log("Received "+my_socket._count+" messages!");
+}
+
+function spam() {
+  var messages = $('#messages').val();
+
+  if(my_socket != null) {
+    setTimeout(function() {
+      for(var i = 0; i < messages; i++) {
+        my_socket.postCommand(["all"], "asd "+i);
+      }
+    }, 2000);
+  } else {
+    console.log("No connection found!");
+  }
+}
+
 function connect() {
   var port = $("#port").val();
-  var my_socket = new MyWebSocket('0.0.0.0', port);
+  my_socket = new MyWebSocket('0.0.0.0', port);
+}
+
+function multi_connect() {
+  var connections = $("#connections").val();
+  var ports = $("#ports").val();
+  var sockets = new Array();
+  ports.split(",").forEach(function(port) {
+    sockets.push(new MyWebSocket('0.0.0.0', port));
+  });
 
   setTimeout(function() {
-    for(var i = 0; i < 100; i++) {
-      my_socket.postCommand(["all"], "asd "+i);
-    }
+    sockets.forEach(function(socket) {
+      for(var i = 0; i < connections; i++) {
+        socket.postCommand(['all'], "message "+i);
+      }
+    });
   }, 2000);
 
-  setTimeout(function() {
-  console.log(my_socket._count);
-  }, 6000);
 }
 
 //websockets = new Array();

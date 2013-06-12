@@ -1,5 +1,10 @@
 \section{Servidor}
 
+
+\subsection{Arquitectura}
+
+O servidor é composto vários brokers (idênticos) e uma base de dados. Os brokers são instâncias de uma aplicação desenvolvida em Ruby e a base de dados é PostgreSQL.
+
 \subsection{Mensagens}
 
 As mensagens que o servidor reconhecem são no seguinte formato:
@@ -39,7 +44,6 @@ Quando a primeira instrução nao é ``all'' então todos as instruções são c
 \label{fig:server-client}
 \end{figure}
 
-
 A figura~\ref{fig:server-client} contém um diagrama de sequência que apresenta o básico da interação entre um cliente e o servidor (entenda-se por servidor como um broker do servidor).
 Um cliente começa por establecer ligação a um dos brokers do servidor. Assim que a ligação é establecida o broker devolve um identificador único ao cliente. Esta etapa está identificada no bloco um na figura~\ref{fig:server-client}. Depois esta etapa inicial são três os cenários possíveiseservidor
 
@@ -50,7 +54,7 @@ Um cliente começa por establecer ligação a um dos brokers do servidor. Assim 
 O cliente envia uma mensagem ao broker (etapa 2 da figura~\ref{fig:server-client}). A mensagem é devolvida ao cliente no processo de broadcast do servidor. 
 
 \item
-\textbf{O servidor faz broadcast duma mensagem}
+\textbf{O servidor faz broadcast de uma mensagem}
 
 O servidor envia uma mensagem no processo de broadcast de mensagens de outros clientes (etapa 3 da figura~\ref{fig:server-client}).
 

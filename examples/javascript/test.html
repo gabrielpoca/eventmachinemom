@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="jquery.gracefulWebSocket.js"></script>
+    <script src="socket.js"></script>
+  </head>
+  <body>
+    <input type="text" id="port" value="8080">
+    <button type="button" onclick="connect()">Connect!</button>
+
+    <input type="text" id="messages" value="150">
+    <button type="button" onclick="spam()">Spam</button>
+
+    <button type="button" onclick="get_count()">Get Count</button>
+
+
+    <input type="text" id="connections" value="150">
+    <input type="text" id="ports" value="8080,8081,8082">
+    <button type="button" onclick="multi_connect()">Multi Connect</button>
+
+  </body>
+</html>

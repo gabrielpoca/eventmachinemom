@@ -2,9 +2,14 @@
 
 require 'eventmachinemom'
 
+# make sure it terminates right to simulate a shutdown
+trap("SIGINT") { exit! }
+
 if ARGV[0].eql? "1"
-  binding.pry
-  EventMachineMOM::Application.new 
-else
+  EventMachineMOM::Server.all.each {|server| server.update_attributes!(active: false)}
+  EventMachineMOM::Application.new '0.0.0.0', 8080, 3000
+elsif ARGV[0].eql? "2"
   EventMachineMOM::Application.new '0.0.0.0', 8081, 3001
+elsif ARGV[0].eql? "3"
+  EventMachineMOM::Application.new '0.0.0.0', 8082, 3002
 end
