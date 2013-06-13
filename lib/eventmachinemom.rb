@@ -32,6 +32,8 @@ module EventMachineMOM
           ws.onopen do
             Application.logger.debug "WebSocket connection open"
             ws.send user.uid.to_json
+            channel = Channel.find_or_create("all")
+            sid[channel.name] = channel.subscribe { |msg| user.send msg }
           end
 
           ws.onmessage do |raw_msg|

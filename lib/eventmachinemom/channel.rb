@@ -29,15 +29,15 @@ module EventMachineMOM
 
     def self.broadcast msg
       begin
-        if msg[0][0].eql? "all"
-          User.all.each do |user|
-            user.send msg[1]
-          end
-        else
+        #if msg[0][0].eql? "all"
+          #User.all.each do |user|
+            #user.send msg[1]
+          #end
+        #else
           msg[0].each do |name|
             Channel.find_or_create(name).push(msg[1])
           end
-        end
+        #end
       rescue Exception => e
         Channel.logger.error "Channel: #{e}"
       end
