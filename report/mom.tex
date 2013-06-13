@@ -1,0 +1,12 @@
+\section{Message Oriented Middleware - MoM}
+Um \textit{Message Oriented Middleware}, ou simplesmente MoM é uma arquitectura que fornece uma camada entre as aplicaçães, substituindo a comunicação directa entre as mesmas por um sistema de troca de mensagens.\\
+Uma implementação \textit{MoM} oferece uma API capaz de funcionar com um número relativamente vasto de plataformas e redes. Essa API fornece um nível de abstracção capaz de aumentar a portbailidade, interoperabilidade e flexibilidades das aplicações que correm sobre a MOM.\\
+Usando a API, os programadores são libertados dos detalhes das várias plataformas e protocolos, reduzinhdo assim a complexidade da implementação das comunicações das suas aplicações.\\
+A comunicação é efectuada através de mensagens que são transmitidas, ou pela estrutura típica cliente/servidor(usando \textit{broadcast} ou \textit{multicast}), ou entre pilhas mantidas por gestores locais. A alternativa que usa gestores de pilhas é a mais poderosa em termos de aplicabilidade e versatilidade.\\ 
+Os sistemas que usam MOM providencias comunicação distribuída com base num modelo d einteracção assíncrono. Os participantes do sistema não precisam de bloquear e espearar numa mensagem enviada, eles podem continuar a processar assim que uma mensagem for enviada. Isso permite a entrega de mensagens quando o receptor ou emissor não estejam activos ou disponíveis para responder na altura da execução. Uma aplicação que envia mensagens não tem a garantia que a sua mensagem vai ser lida por outra aplicação, nem sequer tem a garantia de quanto tempo vai demorar até que a sua mensagem seja entregue. 
+\subsection{Modelos de Mensagens}
+\subsubsection{Ponto a Ponto}
+O modelo de mensagens ponto a ponto fornece uma troca assíncrona de mensagens entre aplicações. Neste modelo, as mensagens de um cliente produtor são encaminhadas para um cliente consumidor através de uma \textit{queue}. O mecanismo mais comun de \textit{queue} é uma \textit{queue} FIFO, na qual as mensagens são ordenadas conforme a ordem em que são recebidas pelo sistema de mensagens, assim que são consumidas são removidas do topo da \textit{queue}. 
+\subsubsection{Publish/Subscribe}
+
+
