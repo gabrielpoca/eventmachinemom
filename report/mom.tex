@@ -7,6 +7,9 @@ Os sistemas que usam MOM providencias comunicação distribuída com base num mo
 \subsection{Modelos de Mensagens}
 \subsubsection{Ponto a Ponto}
 O modelo de mensagens ponto a ponto fornece uma troca assíncrona de mensagens entre aplicações. Neste modelo, as mensagens de um cliente produtor são encaminhadas para um cliente consumidor através de uma \textit{queue}. O mecanismo mais comun de \textit{queue} é uma \textit{queue} FIFO, na qual as mensagens são ordenadas conforme a ordem em que são recebidas pelo sistema de mensagens, assim que são consumidas são removidas do topo da \textit{queue}. 
+Enquanto não existe uma restrição para o número de clientes que podem publicar numa \textit{queue}, existe normalmente apenas um cliente consumidor, apesar de não ser um requisito muito rígido. Cada mensagem que é entregue apenas uma vez a apenas um receptor. o modelo permite que múltiplos receptores possam se concetar à queue, mas epnas um dos receptores vai consumir a mensagem. As técnicas de usar múltiplos clientes para ler de uma \textit{queue} pode  
 \subsubsection{Publish/Subscribe}
+O mecanismo  de \textit{Publish/Subscribe} é um mecanismo muito poderoso, usado para desiminar informação entre produtores e consumidores anonímos de mensagens. Podem ser relaçoes de um para um ou de muitos para muitos, permitem a uma simples consumidas enviar e receber mensagens de potencilamente centenas de milhares de utilizadores. \\
+No modelo publish
 
 
