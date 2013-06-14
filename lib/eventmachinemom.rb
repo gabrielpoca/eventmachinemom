@@ -14,6 +14,7 @@ require 'eventmachinemom/models/session'
 require 'eventmachinemom/models/server'
 require 'eventmachinemom/channel'
 require 'eventmachinemom/sync_server'
+require 'eventmachinemom/websocket_server'
 
 module EventMachineMOM
   class Application
@@ -26,46 +27,47 @@ module EventMachineMOM
         puts "Listing sync..."
 
         EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
-          user = User.create ws
-          sid = Hash.new
+          WebsocketServer.new ws, sync
+          #user = User.create ws
+          #sid = Hash.new
 
-          ws.onopen do
-            Application.logger.debug "WebSocket connection open"
-            ws.send user.uid.to_json
-            channel = Channel.find_or_create("all")
-            sid[channel.name] = channel.subscribe { |msg| user.send msg }
-          end
+          #ws.onopen do
+            #Application.logger.debug "WebSocket connection open"
+            #ws.send user.uid.to_json
+            #channel = Channel.find_or_create("all")
+            #sid[channel.name] = channel.subscribe { |msg| user.send msg }
+          #end
 
-          ws.onmessage do |raw_msg|
-            Application.logger.debug "Recieved message: #{raw_msg}"
-            msg = JSON.parse(raw_msg)
-            if msg[0][0] == "unsubscribe"
-              channel = Channel.find_or_create(msg[1])
-              unless sid[channel.name].nil?
-                channel.unsubscribe sid[channel.name]
-              end
-            elsif msg[0][0] == "subscribe"
-              if msg[0][1] == "persistent"
-                channel = Channel.find_or_create(msg[1], true)
-              else
-                channel = Channel.find_or_create(msg[1])
-              end
-              binding.pry
-              if channel.persistent
-                channel.get_messages.each do |msg|
-                  user.send msg.text
-                end
-              end
-              sid[channel.name] = channel.subscribe { |msg| user.send msg }
-            else # push to channel and send to other brokers
-              Channel.broadcast msg
-              sync.broadcast raw_msg
-            end
-          end
+          #ws.onmessage do |raw_msg|
+            #Application.logger.debug "Recieved message: #{raw_msg}"
+            #msg = JSON.parse(raw_msg)
+            #if msg[0][0] == "unsubscribe"
+              #channel = Channel.find_or_create(msg[1])
+              #unless sid[channel.name].nil?
+                #channel.unsubscribe sid[channel.name]
+              #end
+            #elsif msg[0][0] == "subscribe"
+              #if msg[0][1] == "persistent"
+                #channel = Channel.find_or_create(msg[1], true)
+              #else
+                #channel = Channel.find_or_create(msg[1])
+              #end
+              #binding.pry
+              #if channel.persistent
+                #channel.get_messages.each do |msg|
+                  #user.send msg.text
+                #end
+              #end
+              #sid[channel.name] = channel.subscribe { |msg| user.send msg }
+            #else # push to channel and send to other brokers
+              #Channel.broadcast msg
+              #sync.broadcast raw_msg
+            #end
+          #end
 
-          ws.onclose do
-            Application.logger.debug "Connection closed"
-          end
+          #ws.onclose do
+            #Application.logger.debug "Connection closed"
+          #end
         end
         puts "Listening client..."
 
