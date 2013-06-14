@@ -45,7 +45,17 @@ module EventMachineMOM
                 channel.unsubscribe sid[channel.name]
               end
             elsif msg[0][0] == "subscribe"
-              channel = Channel.find_or_create(msg[1])
+              if msg[0][1] == "persistent"
+                channel = Channel.find_or_create(msg[1], true)
+              else
+                channel = Channel.find_or_create(msg[1])
+              end
+              binding.pry
+              if channel.persistent
+                channel.get_messages.each do |msg|
+                  user.send msg.text
+                end
+              end
               sid[channel.name] = channel.subscribe { |msg| user.send msg }
             else # push to channel and send to other brokers
               Channel.broadcast msg

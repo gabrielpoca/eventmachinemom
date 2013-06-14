@@ -7,10 +7,8 @@ module Base
   def self.extended(base)
     class << base
       attr_accessor :instances
-      attr_accessor :id
     end
     base.instances = Array.new
-    base.id = 0
   end
 
   def create object
@@ -23,9 +21,6 @@ module Base
     @instances
   end
 
-  def get_id
-    @id += 1
-  end
 end
 
 

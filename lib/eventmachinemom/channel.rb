@@ -8,36 +8,32 @@ module EventMachineMOM
     extend BaseLogger
 
     attr_accessor :name
+    attr_accessor :persistent
 
-    def initialize name
+    def initialize params
       super()
-      @name = name
-    end
-
-    def push *items
-      super *items
-      #items.each { |msg| Session.create name: @name, text: msg }
+      @name = params[:name]
+      @persistent = params[:persistent] ||= false
     end
 
     def get_messages
       Session.where name: @name
     end
 
-    def self.find_or_create name
-      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create(name)
+    def push *items
+      super *items
+      items.each { |msg| Session.create name: @name, text: msg } if @persistent
+    end
+
+    def self.find_or_create name, persistent = false
+      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create({name: name, persistent: persistent})
     end
 
     def self.broadcast msg
       begin
-        #if msg[0][0].eql? "all"
-          #User.all.each do |user|
-            #user.send msg[1]
-          #end
-        #else
-          msg[0].each do |name|
-            Channel.find_or_create(name).push(msg[1])
-          end
-        #end
+        msg[0].each do |name|
+          Channel.find_or_create(name).push(msg[1])
+        end
       rescue Exception => e
         Channel.logger.error "Channel: #{e}"
       end
