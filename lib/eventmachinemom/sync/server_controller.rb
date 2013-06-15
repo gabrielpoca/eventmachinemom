@@ -1,4 +1,3 @@
-
 module EventMachineMOM
   module Sync
     class ServerController
@@ -7,12 +6,12 @@ module EventMachineMOM
       def initialize websocket
         @websocket = websocket
 
-        @websocket.onmessage do |msg| 
+        @websocket.onmessage do |msg|
           onmessage msg
         end
 
         @websocket.onopen do
-          onopen 
+          onopen
         end
       end
 

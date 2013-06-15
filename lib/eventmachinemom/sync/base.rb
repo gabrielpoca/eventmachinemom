@@ -1,4 +1,3 @@
-
 module SyncBase
   def self.extended(base)
     class << base

@@ -5,6 +5,7 @@ require 'logger'
 require 'pry'
 require 'pry-debugger'
 
+require 'util/logger'
 
 require 'eventmachinemom/version'
 require 'eventmachinemom/user'
@@ -29,12 +30,12 @@ module EventMachineMOM
       EventMachine.run do
 
         SyncServer.create host, sync_port
-        puts "Listing sync..."
+        Logger.log.debug "sync listening"
 
         EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
           WebsocketServer.new ws
         end
-        puts "Listening client..."
+        Logger.log.debug "websocket listening"
 
       end
     end

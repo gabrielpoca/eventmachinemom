@@ -28,7 +28,7 @@ module EventMachineMOM
           next
         end
 
-        if @server.host.eql?(server.host) 
+        if @server.host.eql?(server.host)
           if !@server.id.eql?(server.id)
             server.update_attributes!(active: false)
             @servers.delete server.id
