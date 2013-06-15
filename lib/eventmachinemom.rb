@@ -28,7 +28,6 @@ module EventMachineMOM
     def initialize host = '0.0.0.0', port = 8080, sync_port = 3000
       EventMachine.run do
 
-        binding.pry
         SyncServer.create host, port
         puts "Listing sync..."
 
