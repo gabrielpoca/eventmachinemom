@@ -14,9 +14,9 @@ require 'eventmachinemom/models/session'
 require 'eventmachinemom/models/server'
 require 'eventmachinemom/channel'
 
-require 'eventmachinemom/sync/sync_base'
-require 'eventmachinemom/sync/sync_client_controller'
-require 'eventmachinemom/sync/sync_server_controller'
+require 'eventmachinemom/sync/base'
+require 'eventmachinemom/sync/client_controller'
+require 'eventmachinemom/sync/server_controller'
 require 'eventmachinemom/sync/sync_server'
 
 require 'eventmachinemom/websocket_server'
@@ -28,7 +28,7 @@ module EventMachineMOM
     def initialize host = '0.0.0.0', port = 8080, sync_port = 3000
       EventMachine.run do
 
-        SyncServer.create host, port
+        SyncServer.create host, sync_port
         puts "Listing sync..."
 
         EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
