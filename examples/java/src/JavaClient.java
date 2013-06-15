@@ -1,7 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.TreeMap;
 
 import org.java_websocket.client.WebSocketClient;
@@ -11,7 +11,6 @@ public class JavaClient extends WebSocketClient {
 
     private int id;
     private int messages;
-
     private TreeMap<Integer, Long> received_time;
     private TreeMap<Integer, Long> sent_time;
 
@@ -33,9 +32,21 @@ public class JavaClient extends WebSocketClient {
             Thread t = new Thread(e);
             t.start();
             Thread.sleep(1000);
-            System.out.print("ENTER to spam "+messages+" messages: ");
-            System.in.read();
-            e.spam();
+//            System.out.print("ENTER to spam "+messages+" messages: ");
+//            System.in.read();
+//            e.spam();
+
+            String CurLine = ""; // Line read from standard in
+            System.out.println("Enter a message to send (type 'quit' to exit): ");
+            InputStreamReader converter = new InputStreamReader(System.in);
+            BufferedReader in = new BufferedReader(converter);
+            while (!(CurLine.equals("quit"))){
+                CurLine = in.readLine();
+                if (!(CurLine.equals("quit"))){
+                    e.send(CurLine);
+                }
+            }
+
             t.join();
 
         } catch (InterruptedException e) {
@@ -48,13 +59,15 @@ public class JavaClient extends WebSocketClient {
     }
 
     public void onMessage( String message ) {
+        System.out.println(message);
         if(id == -1) {
             id = Integer.parseInt(message);
+            send( "[[\"subscribe\",\"persistent\"],\"random\"]" );
         } else {
-            received_time.put(Integer.parseInt(message), System.currentTimeMillis());
-            if(received_time.size() == messages) {
-                dump();
-            }
+//            received_time.put(Integer.parseInt(message), System.currentTimeMillis());
+//            if(received_time.size() == messages) {
+//                dump();
+//            }
         }
     }
 
@@ -71,10 +84,14 @@ public class JavaClient extends WebSocketClient {
         System.out.println( "Closed: " + code + " " + reason );
     }
 
+    public void send(String message) {
+        send(message);
+    }
+
     public void spam() {
         for(int i = 0; i < messages; i++) {
             sent_time.put(i, System.currentTimeMillis());
-            send( "[[\"all\"],\""+i+"\"]" );
+            send( "[[\"random\"],\""+i+"\"]" );
         }
     }
 
