@@ -27,16 +27,23 @@ Como se pode ver na figura~\ref{fig:brokers-arq} os brokers estão todos ligados
 
 Os brokers do servidor são instâncias de uma aplicação desenvolvida em Ruby. Cada instância difere apenas nos endereços de ligação, um endereço para a comunicação com clientes e outro endereço para comunicação com os restantes brokers.
 Cada broker executa num processo Ruby e como tal mesmo na mesma máquina se pode executar diversos brokers de forma a tirar partido de paralelismo (ver secção~\ref{sec:ruby}).
-A aplicação executa numa thread código orientado a eventos (ver secção~\ref{sec:eventmachine}). A lista abaixo apresenta de modo simplista os passos necessários para o establecer de um novo broker
+A aplicação executa numa thread código orientado a eventos (ver secção~\ref{sec:eventmachine}). A enumeração a seguir descreve, de um modo simplista, as etapas necessárias para iniciar um broker.
+
+\subsubsection{Componentes}
+Cada broker inicía dois servidores de websockets, um para comunicação com os clientes e outro para comunicação com os restantes brokers.
+
+\hl{}
 
 \textbf{Novo servidor}
 \begin{enumerate}
-\item Iniciar o servidor de sincronização.
+\item Iniciar o servidor que recebe ligações dos restantes brokers.
 \item Registar o endereço do servidor na base de dado
 \item Criar a ligação a todos os brokers que estão activos na base de dados.
 \item Utilizar cada ligação para informar da actualização da lista de brokers.
 \item Iniciar o servidor de websockets.
 \end{enumerate}
+
+
 
 \subsection{Base de Dados}
 A base de dados é responsável por armazenar as mensagens persistentes, manter uma sequência que forneça identificadores únicos e registar os endereços dos servidores activos.
