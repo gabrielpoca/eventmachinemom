@@ -1,11 +1,11 @@
 class Logger
 
   def self.initialize
-    class << base
+    class << self
       attr_accessor :log
     end
-    base.log = Logger.new STDOUT
-    base.log.level = Logger::DEBUG
+    self.log = Logger.new STDOUT
+    self.log.level = Logger::DEBUG
   end
 
   initialize

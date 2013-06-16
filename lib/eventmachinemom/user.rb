@@ -1,8 +1,7 @@
 require 'eventmachinemom/base'
-require 'eventmachinemom/baselogger'
 
 module EventMachineMOM
-  class User 
+  class User
     extend Base
     extend BaseLogger
 
@@ -15,7 +14,7 @@ module EventMachineMOM
     end
 
     def send data
-      @websocket.send data  
+      @websocket.send data
     end
 
   end

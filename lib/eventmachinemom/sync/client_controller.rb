@@ -1,7 +1,9 @@
+# handles each connection to other servers
+# it is used to send messages.
+
 module EventMachineMOM
   module Sync
     class ClientController
-      extend BaseLogger
 
       def initialize server, servers_pool, inform
         @server = server
@@ -20,7 +22,7 @@ module EventMachineMOM
 
       private
 
-      def callback 
+      def callback
         @servers_pool[@server.id] = @connection
         @connection.send_msg("update") if @inform
       end

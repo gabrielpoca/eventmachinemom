@@ -1,7 +1,10 @@
+# handles each connection to the sync server.
+# it receives broadcast and update messages.
+# it doesn't send messages.
+
 module EventMachineMOM
   module Sync
     class ServerController
-      extend BaseLogger
 
       def initialize websocket
         @websocket = websocket
@@ -15,20 +18,14 @@ module EventMachineMOM
         end
       end
 
-      def broadcast msg
-        @servers.values.each do |server|
-          server.send_msg msg
-        end
-      end
-
       private
 
       def onopen
-        ServerController.logger.info "sync: connection opened"
+        Logger.log.debug "sync opened"
       end
 
       def onmessage msg
-        ServerController.logger.info "sync: received message #{msg}"
+        Logger.log.debug "sync received #{msg}"
         if msg.eql? "update"
           SyncServer.update_servers
         else

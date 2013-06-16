@@ -1,8 +1,7 @@
 require 'eventmachinemom/base'
-require 'eventmachinemom/baselogger'
 require 'eventmachinemom/models/session'
 
-module EventMachineMOM 
+module EventMachineMOM
   class Channel < EM::Channel
     extend Base
     extend BaseLogger
@@ -32,18 +31,25 @@ module EventMachineMOM
     def self.broadcast msg
       begin
         msg[0].each do |name|
-          Channel.find_or_create(name).push(msg[1])
+          Channel.find_or_create(name).push("[[\"#{name}\"],\"#{msg[1]}\"]")
         end
       rescue Exception => e
         Channel.logger.error "Channel: #{e}"
       end
     end
 
-    #def self.initialize_channels
-    #Session.uniq.pluck(:name).each { |session| Channel.create session }
-    #end
+    def self.exists? name
+      @instances.each do |channel|
+        return true if channel.name.eql? name
+      end
+      false
+    end
 
-    #initialize_channels
+    def self.initialize_channels
+      Session.uniq.pluck(:name).each { |session| Channel.create name: session, persistent: true }
+    end
+
+    initialize_channels
 
   end
 end

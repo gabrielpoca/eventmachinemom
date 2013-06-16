@@ -5,11 +5,11 @@ require 'logger'
 require 'pry'
 require 'pry-debugger'
 
-require 'util/logger'
+require 'eventmachinemom/util/logger'
+require 'eventmachinemom/util/baselogger'
 
 require 'eventmachinemom/version'
 require 'eventmachinemom/user'
-require 'eventmachinemom/baselogger'
 require 'eventmachinemom/database'
 require 'eventmachinemom/models/session'
 require 'eventmachinemom/models/server'

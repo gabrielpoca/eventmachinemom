@@ -2,12 +2,9 @@ module EventMachineMOM
   class SyncServer
     extend SyncBase
 
-    attr_accessor :servers
-    attr_accessor :server
-
-    def initialize host = '0.0.0.0', port = 3000
-      @servers = Hash.new
+    def initialize host, port
       @server = Server.create host: "ws://#{host}:#{port}", active: 1
+      @servers = Hash.new
 
       EventMachine::WebSocket.run(host: host, port: port) do |ws|
         Sync::ServerController.new ws
@@ -23,6 +20,7 @@ module EventMachineMOM
     end
 
     def update_servers inform = false
+      Logger.log.debug "updating servers list"
       Server.active.each do |server|
         if @servers.keys.include? server.id
           next
@@ -32,6 +30,7 @@ module EventMachineMOM
           if !@server.id.eql?(server.id)
             server.update_attributes!(active: false)
             @servers.delete server.id
+            Logger.log.info "removing old entry from current host"
           end
           next
         end

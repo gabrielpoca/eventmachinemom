@@ -24,8 +24,8 @@ module EventMachineMOM
 
     def onopen
       WebsocketServer.logger.debug "websocket: connection open"
-      @websocket.send @user.uid.to_json
-      subscribe "all" 
+      @websocket.send [["user_id"], @user.uid].to_json
+      subscribe "all"
     end
 
     def onmessage raw_msg
@@ -34,12 +34,12 @@ module EventMachineMOM
       if msg[0][0] == "unsubscribe"
         unsubscribe msg[1]
       elsif msg[0][0] == "subscribe"
-        subscribe msg[1], "persistent".eql?(msg[0][1])
+        message = subscribe msg[1], "persistent".eql?(msg[0][1]) unless msg[0][1].nil?
+        @user.send message
       else
         Channel.broadcast msg
         SyncServer.broadcast raw_msg
       end
-
     end
 
     def unsubscribe name
@@ -48,11 +48,16 @@ module EventMachineMOM
     end
 
     def subscribe name, persistent = false
+
+      warning = "[[\"#{name}\"],\"Channel already exists! Subscribed.\"]" if Channel.exists?(name)
+
       channel = Channel.find_or_create(name, persistent)
       channel.get_messages.each do |msg|
         @user.send msg.text
       end if channel.persistent
       @sid[channel.name] = channel.subscribe { |msg| @user.send msg }
+
+      warning ||= "[[\"#{name}\"],\"Subscribed.\"]"
     end
 
   end
