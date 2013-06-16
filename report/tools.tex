@@ -37,7 +37,7 @@ Parecendo um cenário desvantajoso para o MRI é de notar que existem soluções
 
 Pode considerar-se que o projecto é composto por duas aplicações, cliente e servidor. A aplicação servidor, desenvolvida Ruby, encontra-se no formato RubyGem, geralmente denominado por gem. Uma gem é uma biblioteca num formato especifico que pode facilmente se descarregada, instalada e manipulada num sistema que possuia Ruby.\cite{rubygems} O que se pretende com esta preocupação é permitir que a aplicação possa facilmente ser distribuída e desse modo também contribuir para a comunidade Ruby. O formato RubyGem é constituído geralmente pelas seguintes componentes:
 
-\begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries Código da aplicação }]
+\begin{description}%[leftmargin=!,labelwidth=\widthof{\bfseries Código da aplicação }]
 \item[Gemspec] Ficheiro que identifica as dependência da gem.
 \item[Código da aplicação] Código a executar pela aplicação, encontra-se na pasta \textit{lib}.
 \item[Testes] Testes da aplicação. No caso deste projecto os testes são \textbf{RSpec} e encontram-se na pasta \textit{spec}.
