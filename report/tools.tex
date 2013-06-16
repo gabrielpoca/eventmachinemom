@@ -3,6 +3,7 @@
 As próximas secções introduzem ferramentas utilizadas no projecto, desde bibliotecas ruby e javascript a base de dados.
 
 \subsection{Ruby}
+\label{sec:ruby}
 
 Ruby é uma linguagem de programação intrepertada com suporte para diferentes paradigmas (funcional, orientado a objectos e imperativo). Desde o lançamento em 1995 Ruby tem crescido em comunidade e potencial. O seu criador, Yukihiro Matsumoto, pretendia uma linguagem que qualquer programador pudesse aperciar:
 
@@ -18,7 +19,7 @@ Ruby encontra-se actualmente na versão 2.0.0-p195 no entanto o projecto foi des
 \subsubsection{\textit{Global Interpreter Lock}}
 \label{sec:gil}
 
-Existem diversos intrepertadores para Ruby sendo os mais importantes \textbf{Matz's Ruby Interpreter (MRI)}, em homenagem ao criador, e \textbf{JRuby}, implementado no topo da Java Virtual Machine. 
+Existem diversos intrepertadores para Ruby sendo os mais importantes \textbf{Matz's Ruby Interpreter (MRI)}, em homenagem ao criador, e \textbf{JRuby}, implementado no topo da Java Virtual Machine.
 A diferença mais relevante entre ambos para este projecto é o \textit{Global Interpreter Lock} (GIL) que existe no MRI. O GIL é uma camada responsável por proteger o intrepertador contra código \textit{non thread-safe}.
 
 A figura~\ref{fig:ruby-gil} apresenta uma comparação entre três versões do Ruby. Na versão 1.8 o intrepertador Ruby possuí apenas uma thread do sistema para execussão. Já na versão 1.9, e também na versão 2 ainda que não seja visível na imagem, várias threads do sistema são alocadas ao intrepertador, o que parece prometer paralelismo de execussão. No entanto em ambos os casos existe a camada do GIL que protegendo contra a execussão de código \textit{non thread-safe} permite que apenas uma thread seja executada de cada vez pelo processador, ou seja, ambas as versões do Ruby correm num core do CPU apenas.
@@ -45,9 +46,10 @@ Pode considerar-se que o projecto é composto por duas aplicações, cliente e s
 \end{description}
 
 \subsubsection{EventMachine}
-EventMachine é uma biblioteca para Ruby que implementa \textit{event-drive I/O}. Como se justifica na secção~\ref{sec:gil} Ruby não foi inicialmente concebido para executar concorrentemente e como tal surgem outras alternativas que procuram tirar melhorar o desempenho das aplicações desenvolvidas em Ruby. A biblioteca EventMachine é utilizada para web servers, email, proxies e outros. 
+\label{sec:eventmachine}
+EventMachine é uma biblioteca para Ruby que implementa \textit{event-drive I/O}. Como se justifica na secção~\ref{sec:gil} Ruby não foi inicialmente concebido para executar concorrentemente e como tal surgem outras alternativas que procuram tirar melhorar o desempenho das aplicações desenvolvidas em Ruby. A biblioteca EventMachine é utilizada para web servers, email, proxies e outros.
 
-Existem diversas implementações de diferentes protocolos sobre a biblioteca EventMachine. No contexto deste projecto faz-se uso da implementação \textbf{EventMachine Websockets} que fornece um servidor de websockets. Esta biblioteca é a base da componente servidor da aplicação. 
+Existem diversas implementações de diferentes protocolos sobre a biblioteca EventMachine. No contexto deste projecto faz-se uso da implementação \textbf{EventMachine Websockets} que fornece um servidor de websockets. Esta biblioteca é a base da componente servidor da aplicação.
 
 \subsubsection{ActiveRecord}
 Esta ferramenta é já parte do cliente.
@@ -57,13 +59,8 @@ Active Record é um biblioteca Ruby que establece uma ligação entre classes e 
 
 \subsection{PostgreSQL}
 
-No primeiro esquema conceptual da arquitectura da aplicação planeou-se utilizar SQLite, cada broker teria a sua base de dados e depois haveria sincronização entre todos. 
+No primeiro esquema conceptual da arquitectura da aplicação planeou-se utilizar SQLite, cada broker teria a sua base de dados e depois haveria sincronização entre todos.
 
 A primeira abordagem além de complexa não explora o \textbf{controlo de concurrência} que grande parte das base de dados oferece como garantido. Como tal a nova abordagem passa por centralizar a base de dados e todos os servidores trabalham sobre a mesma conseguindo-se sincronização e controlo de concurrência.
-
-\subsection{JQuery}
-
-jQuery é uma biblioteca JavaScript que facilita a manipulação de HTML, eventos, animação, Ajax, entre outros, contendo uma API transversal aos browsers.
-Esta bibliteca é base do desenvolvimento do cliente uma vez que facilita muitas operações no código do cliente.
 
 

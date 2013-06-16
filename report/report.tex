@@ -7,7 +7,7 @@
 %
 % Note:
 % The \lipsum[#] commands throughout this template generate dummy text
-% to fill the template out. These commands should all be removed when 
+% to fill the template out. These commands should all be removed when
 % writing essay content.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -22,6 +22,16 @@
 \bibliographystyle{plainnat}
 \usepackage{url}
 
+% latex configuration
+\usepackage{listings}
+\renewcommand*{\lstlistingname}{Code} % replace the label
+\lstset{
+	belowcaptionskip=1\baselineskip,
+	frame=L,
+	xleftmargin=\parindent,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily %font family
+}
 
 \usepackage[portuges]{babel}
 \usepackage[utf8]{inputenc} % Acentuação
@@ -32,8 +42,8 @@
 \usepackage{geometry} % Required to change the page size to A4
 \geometry{a4paper} % Set the page size to be A4 as opposed to the default US Letter
 % For right aligend descriptions
-\usepackage{calc}  
-\usepackage{enumitem} 
+\usepackage{calc}
+\usepackage{enumitem}
 
 \usepackage{graphicx} % Required for including pictures
 
@@ -50,9 +60,9 @@
 
 \begin{document}
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 %	TITLE PAGE
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 
 \begin{titlepage}
 
@@ -89,17 +99,17 @@
 
 \end{titlepage}
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 
 \tableofcontents % Include a table of contents
 
-\newpage % Begins the essay on a new page instead of on the same page as the table of contents 
+\newpage % Begins the essay on a new page instead of on the same page as the table of contents
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 %	INTRODUCTION
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 
 \include{intro}
 
@@ -107,19 +117,17 @@
 
 \include{tools}
 
-
-
 \include{server}
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 %	CONCLUSION
-%----------------------------------------------------------------------------------------
+%--------------------------------------------------------------------------------------
 
-\section{Conclusion} 
+\section{Conclusion}
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 
 %\bibliographystyle{plain}
 \begingroup
@@ -127,6 +135,6 @@
 \bibliography{bibliography.bib}
 \endgroup
 
-%----------------------------------------------------------------------------------------
+%---------------------------------------------------------------------------------------
 
 \end{document}
