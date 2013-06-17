@@ -7,14 +7,14 @@ import java.util.TreeMap;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-public class JavaClient extends WebSocketClient {
+public class SpamClient extends WebSocketClient {
 
     private int id;
     private int messages;
     private TreeMap<Integer, Long> received_time;
     private TreeMap<Integer, Long> sent_time;
 
-    public JavaClient(URI uri, int messages) {
+    public SpamClient(URI uri, int messages) {
         super(uri);
         id = -1;
         this.messages = messages;
@@ -22,52 +22,16 @@ public class JavaClient extends WebSocketClient {
         sent_time = new TreeMap<Integer, Long>();
     }
 
-    public static void main( String[] args ) {
-        int messages = Integer.parseInt(args[1]);
-        String url = "ws://localhost:"+args[0];
-
-        try {
-
-            JavaClient e = new JavaClient(URI.create(url), messages);
-            Thread t = new Thread(e);
-            t.start();
-            Thread.sleep(1000);
-//            System.out.print("ENTER to spam "+messages+" messages: ");
-//            System.in.read();
-//            e.spam();
-
-            String CurLine = ""; // Line read from standard in
-            System.out.println("Enter a message to send (type 'quit' to exit): ");
-            InputStreamReader converter = new InputStreamReader(System.in);
-            BufferedReader in = new BufferedReader(converter);
-            while (!(CurLine.equals("quit"))){
-                CurLine = in.readLine();
-                if (!(CurLine.equals("quit"))){
-                    e.send(CurLine);
-                }
-            }
-
-            t.join();
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.exit(0);
-    }
-
     public void onMessage( String message ) {
         System.out.println(message);
         if(id == -1) {
             id = Integer.parseInt(message);
-            send( "[[\"subscribe\",\"persistent\"],\"random\"]" );
         } else {
-//            received_time.put(Integer.parseInt(message), System.currentTimeMillis());
-//            if(received_time.size() == messages) {
-//                dump();
-//            }
+            try {
+                received_time.put(Integer.parseInt(message), System.currentTimeMillis());
+            } catch (Exception e) {
+                System.out.println("Failed: "+message);
+            }
         }
     }
 
@@ -84,7 +48,7 @@ public class JavaClient extends WebSocketClient {
         System.out.println( "Closed: " + code + " " + reason );
     }
 
-    public void send(String message) {
+    public void custom_message(String message) {
         send(message);
     }
 
@@ -105,6 +69,30 @@ public class JavaClient extends WebSocketClient {
             result += (received_time.get(i) - sent_time.get(i));
         }
         return result/received_time.size();
+    }
+
+    public static void main( String[] args ) {
+        int messages = 1000;
+        String url = "ws://localhost:"+args[0];
+
+        try {
+            SpamClient e = new SpamClient(URI.create(url), messages);
+            Thread t = new Thread(e);
+            t.start();
+            Thread.sleep(1000);
+
+            System.out.print("ENTER to spam "+messages+" messages: ");
+            System.in.read();
+            e.spam();
+
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.exit(0);
     }
 
 }
