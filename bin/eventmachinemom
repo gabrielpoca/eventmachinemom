@@ -3,13 +3,22 @@
 require 'eventmachinemom'
 
 # make sure it terminates right to simulate a shutdown
-trap("SIGINT") { exit! }
+trap("SIGINT") do
+  if !ARGV[1].nil?
+    Logger.dump_log_message ARGV[1]
+  end
+  exit!
+end
+
+hosts = [
+  {host: '0.0.0.0', web: 8080, sync: 3000},
+  {host: '0.0.0.0', web: 8081, sync: 3001},
+  {host: '0.0.0.0', web: 8082, sync: 3002},
+  {host: '0.0.0.0', web: 8083, sync: 3003},
+][ARGV[0].to_i - 1]
 
 if ARGV[0].eql? "1"
   EventMachineMOM::Server.all.each {|server| server.update_attributes!(active: false)}
-  EventMachineMOM::Application.new '0.0.0.0', 8080, 3000
-elsif ARGV[0].eql? "2"
-  EventMachineMOM::Application.new '0.0.0.0', 8081, 3001
-elsif ARGV[0].eql? "3"
-  EventMachineMOM::Application.new '0.0.0.0', 8082, 3002
 end
+
+EventMachineMOM::Application.new hosts[:host], hosts[:web], hosts[:sync], !ARGV[1].nil?
