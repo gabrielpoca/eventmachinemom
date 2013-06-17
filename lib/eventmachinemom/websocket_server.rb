@@ -2,7 +2,8 @@ module EventMachineMOM
   class WebsocketServer
     extend BaseLogger
 
-    def initialize websocket
+    def initialize websocket, log = false
+      @log = log
       @websocket = websocket
       @user = User.create websocket
       @sid = Hash.new
@@ -37,6 +38,7 @@ module EventMachineMOM
         message = subscribe msg[1], "persistent".eql?(msg[0][1]) unless msg[0][1].nil?
         @user.send message
       else
+        Logger.log_message if @log
         Channel.broadcast msg
         SyncServer.broadcast raw_msg
       end

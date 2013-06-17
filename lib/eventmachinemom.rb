@@ -26,14 +26,14 @@ module EventMachineMOM
   class Application
     extend BaseLogger
 
-    def initialize host = '0.0.0.0', port = 8080, sync_port = 3000
+    def initialize host, port, sync_port, log = false
       EventMachine.run do
 
         SyncServer.create host, sync_port
         Logger.log.debug "sync listening"
 
         EventMachine::WebSocket.run(:host => host, :port => port) do |ws|
-          WebsocketServer.new ws
+          WebsocketServer.new ws, log
         end
         Logger.log.debug "websocket listening"
 
