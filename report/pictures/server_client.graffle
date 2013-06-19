@@ -26,7 +26,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-06-16 13:03:06 +0000</string>
+	<string>2013-06-17 22:55:09 +0000</string>
 	<key>Modifier</key>
 	<string>Gabriel Poça</string>
 	<key>NotesVisible</key>
@@ -55,7 +55,7 @@
 		<key>NSPaperSize</key>
 		<array>
 			<string>size</string>
-			<string>{595, 842}</string>
+			<string>{595.29000473022461, 841.8900146484375}</string>
 		</array>
 		<key>NSPrintReverseOrientation</key>
 		<array>
@@ -85,7 +85,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {559, 783}}</string>
+				<string>{{0, 0}, {559.29000473022461, 782.8900146484375}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -1649,7 +1649,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {559, 783}}</string>
+				<string>{{0, 0}, {559.29000473022461, 782.8900146484375}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -1692,8 +1692,8 @@
 					<integer>223</integer>
 					<key>Points</key>
 					<array>
-						<string>{265.5, 213}</string>
-						<string>{265.73871387879876, 148}</string>
+						<string>{284.5, 131}</string>
+						<string>{279.40630547913338, 225}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1727,8 +1727,8 @@
 					<integer>222</integer>
 					<key>Points</key>
 					<array>
-						<string>{404.5, 310}</string>
-						<string>{279.17359654539814, 148}</string>
+						<string>{388, 321}</string>
+						<string>{283.88459276121853, 282}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1767,8 +1767,8 @@
 					<integer>221</integer>
 					<key>Points</key>
 					<array>
-						<string>{128.5, 310}</string>
-						<string>{238.86888127987342, 148}</string>
+						<string>{164.4615642702843, 300.80775424007498}</string>
+						<string>{230.14499963378918, 273.44999984074383}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1800,8 +1800,8 @@
 					<integer>220</integer>
 					<key>Points</key>
 					<array>
-						<string>{355, 328}</string>
-						<string>{265.5, 249}</string>
+						<string>{388, 321}</string>
+						<string>{284.5, 131}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1837,8 +1837,8 @@
 					<integer>219</integer>
 					<key>Points</key>
 					<array>
-						<string>{178, 328}</string>
-						<string>{355, 328}</string>
+						<string>{164, 301}</string>
+						<string>{388, 321}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1872,8 +1872,8 @@
 					<integer>218</integer>
 					<key>Points</key>
 					<array>
-						<string>{178, 328}</string>
-						<string>{265.5, 249}</string>
+						<string>{164, 301}</string>
+						<string>{284.5, 131}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -1891,11 +1891,13 @@
 					<dict>
 						<key>ID</key>
 						<integer>163</integer>
+						<key>Info</key>
+						<integer>3</integer>
 					</dict>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{225.43400341796882, 91}, {89.566001892089844, 57}}</string>
+					<string>{{230.14499963378921, 225}, {89.566001892089844, 57}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -1959,7 +1961,7 @@ Database}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{216, 213}, {99, 36}}</string>
+					<string>{{235, 95}, {99, 36}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -1994,7 +1996,7 @@ Database}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{355, 310}, {99, 36}}</string>
+					<string>{{388, 303}, {99, 36}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>
@@ -2029,7 +2031,7 @@ Database}</string>
 				</dict>
 				<dict>
 					<key>Bounds</key>
-					<string>{{79, 310}, {99, 36}}</string>
+					<string>{{65, 283}, {99, 36}}</string>
 					<key>Class</key>
 					<string>ShapedGraphic</string>
 					<key>ID</key>

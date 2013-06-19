@@ -1,0 +1,45 @@
+\section{Base de Dados}
+A base de dados é uma componente centralizada no servidor. É partilhada por todos os brokers e deve encontrar-se num endereço conhecido por todos. Deste modo as caracteristícas tencológicas da base de dados relevantes para o projecto são a possibilidade de instalação para \textbf{acesso remoto} e \textbf{controlo de concurrência}.
+Nestes termos as opções são variadas, desde MySQL, PostgreSQL, Oracle, Microsoft SQL Server, entre muita outras.
+
+Uma vez que não se pretende tirar grande partido de ferramentas da dimensão do Oracle ou SQL Server é certo que opções com um menor \textit{footprint} são uma melhor opção. Entre MySQL e PostgreSQL não se encontam distinções relevantes no contexto deste problema, mas uma vez que PostgreSQL é a base de dados de preferência da comunidade Ruby será também a adoptada neste projecto como se tinha já referido na secção~\ref{sec:intro-postgres}.
+
+A base de dados é responsável por armazenar as mensagens persistentes, manter uma sequência que forneça identificadores únicos e registar os endereços dos servidores activos.
+
+Funcionalidades da base de dados:
+Guardar mensagens dos canais com persistência.
+Guardar endereços dos servidores.
+
+na escrita de mensagens nos canais (permite determinar quem enviou primeiro)
+na reescrita do estado dos dos servidores
+na obtenção de um identificador único para um utilizador
+
+\renewcommand*{\lstlistingname}{SQL}
+\lstset{language=SQL, caption={SQL para criar a base de dados}}
+\begin{lstlisting}
+CREATE SEQUENCE user_id START 1;
+
+CREATE TABLE IF NOT EXISTS sessions (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR,
+  text TEXT);
+
+CREATE TABLE IF NOT EXISTS servers (
+  id SERIAL PRIMARY KEY,
+  host VARCHAR,
+  active BOOLEAN);
+\end{lstlisting}
+
+\lstset{language=SQL, caption={SQL para criar a base de dados}}
+\begin{lstlisting}
+SELECT nextval('user\_id')
+\end{lstlisting}
+
+
+A base de dados é sempre uma necessidade para as mensagens de canais persistentes.
+No entanto as restantes funcionalidades podiam ser substituídas.
+
+Para a questão de adequirir um identificador único no sistema para cada cliente a solução podia passar por:
+um cliente envia um pedido a todos os brokers para devolver o último identificador, o cliente recolhe todas as mensagens e utiliza o valor mais alto para gerar o próximo identificador. Esta solução teria o problema da concurrência e como tal seria necessária passar um \textit{mutex}, por exemplo, para garantir que apenas um broker pode pedir um identificador de cada vez.
+
+Para identificar os brokers activos podia existir um monitor responsável por fornecer os endereços dos brokers activos a um novo broker e do mesmo modo identificar falhas e informar os brokers.

@@ -5,7 +5,7 @@ Esta secção serve de introdução teórica aos conceitos utilizados ao longo d
 
 % ---------------------- Message Oriented Middleware
 
-\subsection{Message oriented middleware (MOM)} 
+\subsection{Message oriented middleware (MOM)}
 
 Entende-se por \textit{message oriented middleware} (MOM) como um método de comunicação entre componentes de sistemas distribuídos.
 
@@ -62,3 +62,34 @@ Um cliente notifica o servidor de websockets de um evento. O servidor imediament
 
 \input{websockets}
 
+\subsection{Ruby}
+\label{sec:ruby}
+
+Ruby é uma linguagem de programação intrepertada com suporte para diferentes paradigmas (funcional, orientado a objectos e imperativo). Desde o lançamento em 1995 Ruby tem crescido em comunidade e potencial. O seu criador, Yukihiro Matsumoto, pretendia uma linguagem que qualquer programador pudesse aperciar:
+
+\begingroup
+\leftskip4em
+\rightskip\leftskip
+``Ruby is simple in appearance, but is very complex inside, just like our human body.'' \cite{matz}
+\par
+\endgroup
+
+Ruby encontra-se actualmente na versão 2.0.0-p195 no entanto o projecto foi desenvolvido na versão \textbf{2.0.0p0}.
+
+\subsubsection{\textit{Global Interpreter Lock}}
+\label{sec:gil}
+
+Existem diversos intrepertadores para Ruby sendo os mais importantes \textbf{Matz's Ruby Interpreter (MRI)}, em homenagem ao criador, e \textbf{JRuby}, implementado no topo da Java Virtual Machine.
+A diferença mais relevante entre ambos para este projecto é o \textit{Global Interpreter Lock} (GIL) que existe no MRI. O GIL é uma camada responsável por proteger o intrepertador contra código \textit{non thread-safe}.
+
+A figura~\ref{fig:ruby-gil} apresenta uma comparação entre três versões do Ruby. Na versão 1.8 o intrepertador Ruby possuí apenas uma thread do sistema para execussão. Já na versão 1.9, e também na versão 2 ainda que não seja visível na imagem, várias threads do sistema são alocadas ao intrepertador, o que parece prometer paralelismo de execussão. No entanto em ambos os casos existe a camada do GIL que protegendo contra a execussão de código \textit{non thread-safe} permite que apenas uma thread seja executada de cada vez pelo processador, ou seja, ambas as versões do Ruby correm num core do CPU apenas.
+Por outro lado a implementação em JRuby não contém a camada GIL o que abre as portas ao paralelismo das aplicações em Ruby.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{xruby_gil.png}
+\caption{\textit{Global Interpreter Lock}}
+\label{fig:ruby-gil}
+\end{figure}
+
+Parecendo um cenário desvantajoso para o MRI é de notar que existem soluções para contornar este problema. Se se pensar em processos em vez de threads por procurar-se outros meios de repartir trabalho. Decompondo a aplicação e adicionando meios de comunicação entre processos (Starling, RabbitMQ, outros) consegue-se que multiplos processos da mesma aplicação executem concurrentemente.
