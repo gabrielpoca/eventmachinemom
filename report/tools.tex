@@ -1,30 +1,31 @@
 \section{Ferramentas}
 
-As próximas seções introduzem as ferramentas utilizadas no projeto. As primeiras secções contém uma visão aprofundada sobre as ferramentas mais relevantes e a última uma pequena descrição das restantes ferramentas envolvidas no projeto.
+As próximas secções introduzem as ferramentas utilizadas no projeto. As primeiras secções contém uma visão aprofundada sobre as ferramentas mais relevantes e a última uma pequena descrição das restantes ferramentas envolvidas no projeto.
 
-Convém realçar a ferramenta EventMachine sem a qual não é possível executar Ruby paradigma orientado a eventos. Esta ferramenta pode considerar-se um `hack' uma vez que Ruby não foi desenvolvido com esta funcionalidade, no entanto é utilizada com sucesso em vários serviços de elevado desempenho como o Pusher\footnote{http://pusher.com/}.
+Note-se que ferramenta EventMachine sem a qual não é possível executar Ruby num paradigma orientado a eventos. Esta ferramenta pode considerar-se um `hack' uma vez que Ruby não foi desenvolvido com esta funcionalidade, no entanto é utilizada com sucesso em vários serviços de elevado desempenho como o Pusher\footnote{http://pusher.com/}.
 
 \subsubsection{EventMachine}
 \label{sec:eventmachine}
-EventMachine é uma biblioteca para Ruby que implementa \textit{event-drive I/O}. Como se justifica na secção~\ref{sec:gil} Ruby não foi inicialmente concebido para executar concorrentemente e como tal surgem outras alternativas que procuram tirar melhorar o desempenho das aplicações desenvolvidas em Ruby. A biblioteca EventMachine é utilizada para web servers, email, proxies e outros.
 
-Existem diversas implementações de diferentes protocolos sobre a biblioteca EventMachine. No contexto deste projecto faz-se uso da implementação \textbf{EventMachine Websockets} que fornece um servidor de websockets. Esta biblioteca é a base da componente servidor da aplicação.
+EventMachine é uma biblioteca Ruby que implementa \textit{event-drive I/O}. Como se justifica na secção~\ref{sec:gil} Ruby não foi inicialmente concebido para executar concorrentemente, no entanto a comunidade à volta da linguagem contribuí com imenso código e ferramentas de código aberto. A biblioteca EventMachine é utilizada para web servers, email, proxies e outros.
+
+Existem diversas implementações de diferentes protocolos sobre a biblioteca EventMachine. Neste projecto faz-se uso da implementação \textbf{EventMachine Websockets} que fornece um esqueleto para a construção de um servidor de websockets com EventMachine. Esta biblioteca é a base da componente servidor da aplicação.
 
 \subsubsection{RubyGems}
 
-Pode considerar-se que o projecto é composto por duas aplicações, cliente e servidor. A aplicação servidor, desenvolvida Ruby, encontra-se no formato RubyGem, geralmente denominado por gem. Uma gem é uma biblioteca num formato especifico que pode facilmente se descarregada, instalada e manipulada num sistema que possuia Ruby.\cite{rubygems} O que se pretende com esta preocupação é permitir que a aplicação possa facilmente ser distribuída e desse modo também contribuir para a comunidade Ruby. O formato RubyGem é constituído geralmente pelas seguintes componentes:
+Pode considerar-se que o projecto é composto por duas aplicações, cliente e servidor. A aplicação servidor, desenvolvida Ruby, encontra-se no formato RubyGem, geralmente denominado por gem. Uma gem é uma biblioteca num formato especifico que pode facilmente se descarregada, instalada e manipulada num sistema que possuía Ruby.\cite{rubygems} O que se pretende com esta preocupação é permitir que a aplicação possa facilmente ser distribuída e desse modo também contribuir para a comunidade Ruby. O formato RubyGem é constituído geralmente pelas seguintes componentes:
 
 \begin{description}[leftmargin=!,labelwidth=\widthof{\bfseries Código da aplicação }]
 \item[Gemspec] Ficheiro que identifica as dependência da gem.
 \item[Código da aplicação] Código a executar pela aplicação, encontra-se na pasta \textit{lib}.
 \item[Testes] Testes da aplicação. No caso deste projecto os testes são \textbf{RSpec} e encontram-se na pasta \textit{spec}.
-\item[Excutáveis] Ficheiros executáveis que são instalados no sistema que podem ser invocados pelo utilizador ou outro software. Encontram-se na pasta \textit{bin}.
+\item[Executáveis] Ficheiros executáveis que são instalados no sistema que podem ser invocados pelo utilizador ou outro software. Encontram-se na pasta \textit{bin}.
 \end{description}
 
 
 \subsubsection{ActiveRecord}
 Esta ferramenta é já parte do cliente.
-Active Record é um biblioteca Ruby que establece uma ligação entre classes e tabelas de bases de dados relacionais sem grande configuração. Esta biblioteca uma classe base que quando é extendida establece um mapeamento entre a nova classe e um tabela existente na base de dados. A biblioteca foi desenvolvida inicialmente para a framework Ruby on Rails sendo o base do que se chama models.
+Active Record é um biblioteca Ruby que estabelece uma ligação entre classes e tabelas de bases de dados relacionais sem grande configuração. Esta biblioteca uma classe base que quando é estabelece um mapeamento entre a nova classe e um tabela existente na base de dados. A biblioteca foi desenvolvida inicialmente para a framework Ruby on Rails sendo o base do que se chama models.
 
 É importante referir que o uso desta biblioteca permite que não se escreva SQL de de operações sobre a base de dados à excepção da criação de tabelas sendo esta processo gerado por operações em Ruby.
 
@@ -32,7 +33,10 @@ Active Record é um biblioteca Ruby que establece uma ligação entre classes e 
 \label{sec:intro-postgres}
 No primeiro esquema conceptual da arquitectura da aplicação planeou-se utilizar SQLite, cada broker teria a sua base de dados e depois haveria sincronização entre todos.
 
-A primeira abordagem além de complexa não explora o \textbf{controlo de concurrência} que grande parte das base de dados oferece como garantido. Como tal a nova abordagem passa por centralizar a base de dados e todos os servidores trabalham sobre a mesma conseguindo-se sincronização e controlo de concurrência.
+A primeira abordagem além de complexa não explora o \textbf{controlo de concorrência} que grande parte das base de dados oferece como garantido. Como tal a nova abordagem passa por centralizar a base de dados e todos os servidores trabalham sobre a mesma conseguindo-se sincronização e controlo de concorrência.
 
 \subsection{Outros}
+\begin{description}
+\item[bundler] provavelmente a ferramenta mais utilizada no desenvolvimento em Ruby. Esta ferramenta faz com que as aplicações ruby executam o mesmo mesmo código independentemente da máquina. O que faz é gerir as gems utilizadas pela aplicação, instalando a mesma versão em todas as máquinas e obrigando a aplicação a utilizar essa mesma versão. A ferramenta permite facilita também a criação de gems novas. Ambas as funcionalidades são utilizadas neste projeto.
+\end{description}
 

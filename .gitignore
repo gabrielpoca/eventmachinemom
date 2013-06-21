@@ -25,3 +25,4 @@ report/*.gz
 *.csv
 log/
 *.xlsx
+*.bak

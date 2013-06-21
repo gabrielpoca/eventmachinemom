@@ -3,7 +3,6 @@
 É de notar que até este ponto no relatório se faz referência ao servidor como uma componente.
 Nesta secção o servidor é analisado como o conjunto das suas componentes, descrevendo-se as funcionalidades de cada componente, meios de comunicação e protocolo.
 
-
 \subsection{Broker}
 
 Os brokers do servidor são instâncias de uma aplicação desenvolvida em Ruby. Cada instância difere apenas nos endereços de comunicação, o endereço para comunicação com clientes e outro para comunicação com os restantes brokers.
@@ -39,27 +38,5 @@ O serviço de comunicação com os clientes é responsável por toda a comunica�
 \item Criar a ligação a todos os brokers que estão activos na base de dados.
 \item Utilizar cada ligação para informar da actualização da lista de brokers.
 \item Iniciar o servidor de websockets.
-\end{enumerate}
-
-
-
-\subsection{Arquitectura}
-
-O servidor é composto por um, ou vários, brokers e uma base de dados. Os brokers são instâncias da mesma aplicação, ou seja, são idênticos, e a base de dados é PostgreSQL. A ideia é ser indiferente o broker ao qual um cliente establece ligação uma vez que o comportamento é distribuído pelos restantes.
-Por exemplo: dois clientes subescreverem o mesmo canal em brokers diferentes e um terceiro cliente envia uma mensagem para esse canal, então ambos os novos clientes recebem a mensagem.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.65\textwidth]{brokers.png}
-\caption{\textit{Visão simplista da arquitectura do servidor.}}
-\label{fig:brokers-arq}
-\end{figure}
-
-A figura~\ref{fig:brokers-arq} apresenta um esquema simplista das ligações entre os diferentes componentes do servidor. Como se pode ver os brokers estão todos ligados entre si e cada um está ligado à base de dados.
-A base de dados é responsável por armazenar as mensagens persistentes, manter uma sequência que forneça identificadores únicos para identificar os clientes e registar os endereços dos servidores activos. Todas as restantes acções são da responsabilidade dos brokers, deste modo a ligação entre todos os brokers serve dois propósitos:
-
-\begin{enumerate}
-\item \textbf{Difundir mensagens}. As mensagens que um broker recebe são difundidas pelos restantes. Isto permite que vários clientes possam subscrever os mesmos canais quando estão ligados em brokers diferentes.
-\item \textbf{Informar da actualização na lista de servidores}. Quando existe um novo broker online ou um dos brokers é identificado como inactivo o novo broker ou o broker que identificou o problema, respectivamente, actualizam a base de dados e enviam uma mensagem de actualização a todos os brokers.
 \end{enumerate}
 
