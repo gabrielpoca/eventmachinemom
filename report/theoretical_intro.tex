@@ -18,6 +18,8 @@ Entende-se por \textit{message oriented middleware} (MOM) como um método de com
 
 No contexto deste relatório entede-se por MOM como uma camada de comunicação que permite a várias aplicações comunicar ignorando as especificidades de cada uma.
 
+\input{mom}
+
 % ---------------------- Websockets
 
 \subsection{Introdução a websockets}
@@ -25,7 +27,6 @@ No contexto deste relatório entede-se por MOM como uma camada de comunicação 
 A conceção inicial da web considerou apenas a comunicação cliente-servidor num sentido apenas. Actualmente o HTML5 procura corrigir esta entrave, contudo ainda muitos projectos utilizam \textit{long-polling} para simular a comunicação cliente-servidor.
 
 Actualmente os browsers são actualizados regularmente e suportam a API de comunicação do HTML5.
-
 \subsubsection{\textit{Long pulling}}
 
 \begin{figure}[H]
@@ -58,3 +59,6 @@ Um cliente (browser) faz um pedido ao servidor. O servidor responde com o últim
 \end{figure}
 
 Um cliente notifica o servidor de websockets de um evento. O servidor imediamente notifica todos os clientes ativos do evento. Este processo pode envolver filtros e subscrição de eventos.
+
+\input{websockets}
+

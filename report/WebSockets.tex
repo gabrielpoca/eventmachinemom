@@ -1,4 +1,4 @@
-\section{WebSockets}
+\subsection{Websockets}
 WebSockets é um protocolo que permite umq comunicação \textit{full-duplex} sobre um único \textit{socket} TCP. Foi desenhado para ser usado em \textit{browsers} e em servidores que suportem o HTML 5.\\
 Historicamente, ao criar uma aplicação \textit{web} em que fosse necessário uma comunicação bidireccional entre cliente e servidor, isso implicava um abuso do HTTP para o \textit{poll} do servidor para actualizações enquanto enviava notificações para chamadas HTTP distintas. Esta abordagem levantava vários problemas, entre os quais o facto de o servidor ser forçado a usar um número diferente de conexões TCP subjacentes para cada cliente assim como facto de o protocolo ter um grande \textit{overhead}.\\
 A solução mais simples para o problema seria usar apenas uma conxeão TCP para o tráfego em ambas as direcções. Essa solução é apresentada pela API fornecida pelos \textit{WebSockets} ao providenciar uma alternativa ao usual HTTP \textit{polling} para comunicação nas duas direcções.\\
