@@ -4,36 +4,5 @@ Historicamente, ao criar uma aplicação \textit{web} em que fosse necessário u
 A solução mais simples para o problema seria usar apenas uma conxeão TCP para o tráfego em ambas as direcções. Essa solução é apresentada pela API fornecida pelos \textit{WebSockets} ao providenciar uma alternativa ao usual HTTP \textit{polling} para comunicação nas duas direcções.\\
 Esta técnica de \textit{WebSockets} pode ser usada para várias aplicações Web, especialmente as que necessitam de constante trocas de pacotes em tempo real como jogos on-line. O protocolo websocket é um tecnologia incluída no html5 e é suportada actualmente pela maior parte dos browsers. O seu esquema de de url é \textit{ws} ou \textit{wss} para comunicações seguras. \\
 O protocolo \textit{WebSocket} foi desenhado para suplantar as tecnologias de comunicação bidireccional existenetes que usam o HTTP como camada  de transporte. Essas tecnologias são implementadas como \textit{trade-offs} entre eficiência e confiança porque o HTTP não foi inicialmente desenhado para ser usado em conexões bidireccionais. O protocolo \textit{WebSocket} procura atingir os objectivos das tecnologias bidireccionais do HTTP no contexto do próprio HTTP, é desenhado para trablhar sobre as portas 80 e 443 do HHTP assim como suportar HTTP \textit{proxies} e intermediários, mesmo que isso implique uma maior complexidade.\\
-\subsection{API}
-Construtor WebSocket
-\begin{verbatim}
-var connection = new WebSocket('ws://example.org');
-\end{verbatim}
-Se a conexão for aceite, então ocorre o evento \textit{onopen} do lado do cliente
-\begin{verbatim}
-connection.onpen=function(){
-	console.log('Connection open');
-}
-\end{verbatim}
-Se a conexão é recusada do lado do servidor, o método \textit{onclose} ocorre
-\begin{verbatim}
-connection.onclose = function(){
-	console.log('Connection closed');
-}
-\end{verbatim}
-Fechar explicitamente o socket
-\begin{verbatim}
-connection.close()
-\end{verbatim}
-Enviar uma mensagem
-\begin{verbatim}
-connection.send('Hello World')
-\end{verbatim}
-Evento receber mensagem
-\begin{verbatim}
-connection.onmessage = function(e){
-	var server_message = e.data;
-	console.log(server_message);
-}
-\end{verbatim}
+
 
