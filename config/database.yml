@@ -4,5 +4,5 @@ username: emom
 password: emom
 pool: 5
 timeout: 5000
-host: 192.168.1.10
+host: 0.0.0.0
 port: 5432

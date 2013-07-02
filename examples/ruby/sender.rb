@@ -4,9 +4,10 @@ require 'json'
 require 'pry'
 require 'pry-debugger'
 require 'csv'
+require 'yaml'
 
 # run with argument 1, 2 or 3.
-@host = ['ws://192.168.1.10:8080', 'ws://0.0.0.0:8081', 'ws://0.0.0.0:8082'][ARGV[0].to_i - 1]
+@host = ['ws://0.0.0.0:8080', 'ws://0.0.0.0:8081', 'ws://0.0.0.0:8082'][ARGV[0].to_i - 1]
 @messages = 1000
 
 @logs = !ARGV[1].nil?
@@ -16,11 +17,8 @@ require 'csv'
 
 Signal.trap("INT") do
   if @logs
-    value = 0
-    @sends.values.each {|v| value += (v.to_f*1000).to_i}
-    value = value/@sends.size
-    CSV.open("sends.csv", "a") do |csv|
-      csv << [@label, value]
+    File.open('sends.yml', 'w') do |out|
+      YAML.dump(@sends, out)
     end
   end
   exit

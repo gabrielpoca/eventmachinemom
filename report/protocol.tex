@@ -1,40 +1,76 @@
-
 \section{Protocolo de comunicação}
 \label{sec:protocolo}
 
-As mensagens que o servidor reconhecem são no seguinte formato:
+Como referido nas secções anteriores os brokers estão obviamente ligados entre si. Como tal pode dizer que existem dois protocolos de comunicação, um para a comunicação com os clientes e outro para a comunicação entre brokers. Esta secção pretende descrever as mensagens suportadas e o comportamento desencadedo pelas mesmas.
 
-[[instructions], message]
+\subsection{Comunicação entre brokers}
+A comunicação entre os brokers permite a troca das seguintes mensagens:
+\begin{enumerate}
+  \item 
+  \texttt{``update''}
 
-Pode resumir-se que é um array que contém uma lista de instruções na posição zero e uma mensagem na posição um. Existem os seguintes tipos de mensagens:
+  Mensagem que indica que deve haver uma actualização da lista de brokers. Quando um broker recebe esta mensagem começa por ir à base de dados descarregar a lista de brokers activos. A partir dessa lista compara com a lista actual e cancela ou establece novas ligações conforme a divergência com a nova lista.
 
+  \item
+  \texttt{[[``channel 1'', ``channel 2''], ``message'']}
+
+  Esta mensagem tem o comportamento equivalente a quando é enviada por um cliente como se pode ver na seção seguinte.
+\end{enumerate}
+
+
+\subsection{Comunicação com o cliente}
+As mensagens reconhecidas pelo servidor deve estar no seguinte formato:
+
+\begin{center}
+  \texttt{[[instructions], message]}
+\end{center}
+
+Cada mensagem é um array que contém uma lista de instruções na posição zero e uma mensagem na posição um. Este formato é utilizado em todas as acções com o MOM, desde subscrições a submissão de mensagens. O próprio MOM responde neste formato quando devolve mensagens de erro ou sucesso.
+
+Este formato é inspirado no projeto jinfinote\footnote{https://github.com/sveith/jinfinote}. O projeto jinfinote é uma implementação do protocolo infinote em javascript. Este protocolo permite edição colaborativa em tempo real de documentos de texto e foi explorado numa primeira fase deste projeto como possível aplicação de teste para o MOM. Os clientes jinfinote trocam mensagens neste mesmo formato.
+
+As mensagens que um cliente pode trocar com um servidor podem ser relacionadas com a subscrição ou cancelamento de canais e submissão de mensagens. As próxmas secções apresentam as mensagens reconhecidas pelo servidor e o comportamento que as mesmas desencadeiam.
+
+\subsection{Subscrição}
 \begin{enumerate}
 \item
 \texttt{[[``subscribe''], ``channel'']}
 
-Quando a primeira instrução é ``subscribe'' o servidor subscreve o cliente ao canal com o nome que vai no lugar da mensagem.
+Quando a primeira instrução é ``subscribe'' o servidor subscreve o cliente ao canal com o nome que vai no lugar da mensagem, neste caso ``channel''. Se o canal não existir então é criado.
 
 \item
 \texttt{[[``subscribe'', ``persistent''], ``channel'']}
 
-Se o subscribe for acompanhado de um persistent então o canal criado é persistente. Senão subscreve ao canal existente.
+Se a instrução ``subscribe'' for acompanhada de ``persistent'' um canal persistente é criado. Se já existir um canal com o mesmo nome é subscrito a esse mesmo independentemente de ser persistente ou não.
 
+\item
+\texttt{[[``subscribe'', ``task''], ``channel'']}
+
+Se a instrução ``subscribe'' for acompanhada de ``task'' um canal do tipo \textit{task} é criado. Caso exista um canal com o nome a subscrição é feita a esse mesmo canal.
+\end{enumerate}
+
+%- end subsection subscricao
+
+\subsection{Cancelamento}
+\begin{enumerate}
 \item
 \texttt{[[``unsubscribe''], ``channel'']}
 
 Quando a primeira instrução é ``unsubscribe'' o servidor remove a descrição do cliente ao canal com o nome que vai no lugar da mensagem.
+\end{enumerate}
 
-\item
-\texttt{[[``all''], ``message'']}
+%- end subsection cancelamento
 
-Quando a primeira instrução é ``all'' a mensagem é enviada a todos os clientes do servidor (clientes de todos os brokers).
-
+\subsection{Submissão de mensagens}
+\begin{enumerate}
 \item
 \texttt{[[``channel 1'', ``channel 2''], ``message'']}
 
 Quando a primeira instrução não é ``all'' então todos as instruções são consideradas nomes de canais e a mensagem é distribuída por todos os clientes subscritos ao canal.
 
 \end{enumerate}
+
+%- end subsection submissao
 
 \subsection{Ciclo de Vida de um Cliente}
 

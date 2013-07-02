@@ -13,15 +13,17 @@ module EventMachineMOM
       dbconfig = YAML::load(File.open('config/database.yml'))
       ActiveRecord::Base.establish_connection(dbconfig)
 
-      sql = 'CREATE TABLE IF NOT EXISTS sessions (
+      sql = "CREATE TABLE IF NOT EXISTS sessions (
       id SERIAL PRIMARY KEY,
       name VARCHAR,
-      text TEXT);
+      text TEXT,
+      sent BOOLEAN DEFAULT FALSE,
+      mode VARCHAR DEFAULT 'normal');
 
       CREATE TABLE IF NOT EXISTS servers (
       id SERIAL PRIMARY KEY,
       host VARCHAR,
-      active BOOLEAN);'
+      active BOOLEAN);"
 
       ActiveRecord::Base.connection.execute(sql)
 

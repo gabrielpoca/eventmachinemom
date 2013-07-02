@@ -35,8 +35,7 @@ module EventMachineMOM
       if msg[0][0] == "unsubscribe"
         unsubscribe msg[1]
       elsif msg[0][0] == "subscribe"
-        message = subscribe msg[1], "persistent".eql?(msg[0][1]) unless msg[0][1].nil?
-        @user.send message
+        subscribe msg[1], msg[0][1]
       else
         Logger.log_message if @log
         Channel.broadcast msg
@@ -49,17 +48,34 @@ module EventMachineMOM
       channel.unsubscribe @sid[channel.name] unless @sid[channel.name].nil?
     end
 
-    def subscribe name, persistent = false
+    def pop name
+      channel = Channel.find_or_create name, false
+      channel.pop { |msg| @user.send msg }
+    end
 
-      warning = "[[\"#{name}\"],\"Channel already exists! Subscribed.\"]" if Channel.exists?(name)
+    def subscribe name, mode = false
+      @user.send channel_exists_message name
+      channel = Channel.find_or_create(name, mode)
+      if mode.eql? "persistente"
+        channel.get_messages.each do |msg|
+          @user.send msg.text
+        end if channel.mode
+        @sid[channel.name] = channel.subscribe { |msg| @user.send msg }
+      elsif mode.eql? "task"
+        channel.pop { |msg| @user.send msg }
+      else
+        @sid[channel.name] = channel.subscribe { |msg| @user.send msg }
+      end
+    end
 
-      channel = Channel.find_or_create(name, persistent)
-      channel.get_messages.each do |msg|
-        @user.send msg.text
-      end if channel.persistent
-      @sid[channel.name] = channel.subscribe { |msg| @user.send msg }
+    private
 
-      warning ||= "[[\"#{name}\"],\"Subscribed.\"]"
+    def channel_exists_message name
+      if Channel.exists? name
+        warning = "[[\"#{name}\"],\"Channel already exists! Subscribed.\"]"
+      else
+        warning ||= "[[\"#{name}\"],\"Subscribed.\"]"
+      end
     end
 
   end

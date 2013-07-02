@@ -7,12 +7,12 @@ module EventMachineMOM
     extend BaseLogger
 
     attr_accessor :name
-    attr_accessor :persistent
+    attr_accessor :mode
 
     def initialize params
       super()
       @name = params[:name]
-      @persistent = params[:persistent] ||= false
+      @mode = params[:mode] ||= "normal"
     end
 
     def get_messages
@@ -20,12 +20,17 @@ module EventMachineMOM
     end
 
     def push *items
-      super *items
-      items.each { |msg| Session.create name: @name, text: msg } if @persistent
+      #if @mode == "task"
+        #items = items.dup
+        #EM.schedule { items.each { |i| @subs.values.sample.call i } }
+      #else
+        super *items
+        items.each { |msg| Session.create name: @name, text: msg, mode: @mode } if !@mode.eql?("normal")
+      #end
     end
 
-    def self.find_or_create name, persistent = false
-      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create({name: name, persistent: persistent})
+    def self.find_or_create name, mode = false
+      @instances.select {|channel| channel.name.eql?(name)}[0] ||= Channel.create({name: name, mode: mode})
     end
 
     def self.broadcast msg
@@ -46,10 +51,12 @@ module EventMachineMOM
     end
 
     def self.initialize_channels
-      Session.uniq.pluck(:name).each { |session| Channel.create name: session, persistent: true }
+      Session.uniq.pluck(:name).each do |session| 
+        mode = Session.where(name: session).last.mode
+        Channel.create name: session, mode: mode
+      end
     end
 
     initialize_channels
-
   end
 end
