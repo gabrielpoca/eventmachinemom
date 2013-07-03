@@ -8,7 +8,7 @@ Sendo que cada broker executa num processo Ruby justifica-se que na mesma máqui
 Note-se que cada broker executa numa thread apenas uma vez que a aplicação executa no no paradigma orientado a eventos fazendo uso da ferramenta EventMachine (ver secção~\ref{sec:eventmachine}).
 
 Toda a comunicação do servidor funciona sobre websockets. Tanto com clientes como entre os brokers (à exceção evidente da comunicação com a base de dados). A decisão de utilizar websockets para comunicação entre os brokers é questionável, outros protocolos como o Advanced Message Queuing Protocol\footnote{http://en.wikipedia.org/wiki/Advanced\_Message\_Queuing\_Protocol} são uma solução eventualmente mais estável uma vez que é adotado por imensas ferramentas relacionadas.
-Contudo o único requisito quanto à comunicação entre brokers neste projeto passa por garantir comunicação não bloqueante, como tal websockets é uma tecnologia que se utiliza na comunicação com clientes e não existe impedimento ao uso na comunicação entre brokers Motivos que revelem outros protocolos como mais adequados podem surgir em situações que se entenda que é necessário diminuir tempos de comunicação ou algo semelhante.
+Contudo o único requisito quanto à comunicação entre brokers neste projeto passa por garantir comunicação não bloqueante, como tal websockets é uma tecnologia que se utiliza na comunicação com clientes e não existe impedimento ao uso na comunicação entre brokers. Motivos que revelem outros protocolos como mais adequados podem surgir em situações que se entenda que é necessário diminuir tempos de comunicação ou algo semelhante.
 
 \subsection{Componentes}
 Como se entende da introdução a esta secção cada broker garante dois serviços de websockets:
@@ -22,6 +22,7 @@ Ainda que execute dois serviços de websockets que atendem em portas diferentes 
 
 \subsubsection{Serviço de comunicação}
 
+Esta secção pretende apresentar a interação entre um cliente e o servidor.
 O serviço de comunicação com os clientes responde aos seguintes eventos de um cliente:
 
 \begin{enumerate}
@@ -31,6 +32,35 @@ O serviço de comunicação com os clientes responde aos seguintes eventos de um
 \item \textbf{difusão de mensagens}. O servidor entrega uma mensagem nos canais pretendidos.
 \end{enumerate}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textwidth]{server_client.png}
+\caption{\textit{Ciclo de vida de um cliente.}}
+\label{fig:server-client}
+\end{figure}
+
+A figura~\ref{fig:server-client} contém um diagrama de sequência que apresenta o básico da interação entre um cliente e o servidor (entenda-se por servidor como um broker do servidor).
+Um cliente começa por estabelecer ligação a um dos brokers do servidor. Assim que a ligação é estabelecida o broker devolve um identificador único ao cliente. Esta etapa está identificada no bloco um na figura~\ref{fig:server-client}. Depois esta etapa inicial são três os cenários possíveis servidor
+
+\begin{itemize}
+\item
+\textbf{O cliente envia uma mensagem}
+
+O cliente envia uma mensagem ao broker (etapa 2 da figura~\ref{fig:server-client}). A mensagem é devolvida ao cliente no processo de broadcast do servidor.
+
+\item
+\textbf{O servidor faz broadcast de uma mensagem}
+
+O servidor envia uma mensagem no processo de broadcast de mensagens de outros clientes (etapa 3 da figura~\ref{fig:server-client}).
+
+\item
+\textbf{O cliente termina a ligação}
+
+O cliente termina a ligação com o servidor (etapa 4 da figura~\ref{fig:server-client}).
+\end{itemize}
+
+
+%-- Sincronização 
 
 \subsubsection{Serviço de sincronização}
 De modo a melhor explicar o comportamento desencadeado nas diferentes situações as próximas listas contém uma enumeração sequencial dos eventos no servidor para diferentes situações.
@@ -75,3 +105,8 @@ O servidor reconhece uma falha num broker quando os restantes tentam enviar-lhe 
 \item Todos os brokers que recebem mensagem de actualização vão à base de dados verificar as divergências com a nova lista de brokers activos, removendo ou establecendo ligações consoante necessário.
 \end{enumerate}
 
+
+\subsubsection{Identificação de utilizadores}
+Existem diversos métodos para fornecer identificadores únicos aos clientes. Num caso de um sistema ditribuído poderia eleger-se um broker como responsável pelo processo, ou adoptar um protocolo que permitisse aos brokers chegar a um acordo aquando a atribuição de um identificador. A método adoptado consiste em passar a responsabilidade para a base de dados. Esta mantém uma \textit{sequence} a partir da qual devolve identificadores aos brokers. O controlo de concorrência é responsabilidade da base de dados. Deste modo reduz-se o numero de mensagens trocadas entre os brokers e diminui-se a complexidade de implementação fazendo uso de uma ferramenta que é de qualquer modo necessária para o servidor.
+
+É de realçar que este identificador não apresenta relevância para o servidor, serve apenas para o caso de os clientes pretenderem identificar-se nas mensagens.
