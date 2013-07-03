@@ -1,32 +1,34 @@
 \section{Servidor}
 
-É de notar que até este ponto no relatório se faz referência ao servidor como uma componente.
-Nesta secção o servidor é analisado como o conjunto das suas componentes, descrevendo-se as funcionalidades de cada componente, meios de comunicação e protocolo.
+Nesta secção não se pretende analisar o servidor mas os broker e as respectivas componentes, descrevendo as respectivas responsabilidades e comportamento.
+Relembra-se que o servidor é constituído por um numero aleatório de brokers e uma base de dados.
 
 \subsection{Broker}
 
-Os brokers do servidor são instâncias de uma aplicação desenvolvida em Ruby. Cada instância difere apenas nos endereços de comunicação, o endereço para comunicação com clientes e outro para comunicação com os restantes brokers.
+Os brokers são instâncias de uma aplicação desenvolvida em Ruby. Cada instância difere apenas nos endereços de comunicação: um para comunicação com clientes e outro para comunicação com os restantes brokers.
 Sendo que cada broker executa num processo Ruby justifica-se que na mesma máquina se executem diversos brokers de forma a tirar partido de paralelismo de processamento (ver secção~\ref{sec:ruby}).
-Note-se que cada broker executa numa thread apenas uma vez que foi desenvolvida no paradigam orientado a eventos fazendo uso da ferramenta EventMachine (ver secção~\ref{sec:eventmachine}).
+Note-se que cada broker executa numa thread apenas uma vez que a aplicação executa no no paradigma orientado a eventos fazendo uso da ferramenta EventMachine (ver secção~\ref{sec:eventmachine}).
 
-Toda a comunicação no servidor é realizada por websockets, tanto para os clientes como entre os brokers. Mais detalhes no protocol de comunicação na secção~\ref{sec:protocolo}.
+Toda a comunicação do servidor funciona sobre websockets. Tanto com clientes como entre os brokers (à exceção evidente da comunicação com a base de dados). A decisão de utilizar websockets para comunicação entre os brokers é questionável, outros protocolos como o Advanced Message Queuing Protocol\footnote{http://en.wikipedia.org/wiki/Advanced\_Message\_Queuing\_Protocol} são uma solução eventualmente mais estável uma vez que é adotado por imensas ferramentas relacionadas.
+Contudo o único requisito quanto à comunicação entre brokers neste projeto passa por garantir comunicação não bloqueante, como tal websockets é uma tecnologia que se utiliza na comunicação com clientes e não existe impedimento ao uso na comunicação entre brokers Motivos que revelem outros protocolos como mais adequados podem surgir em situações que se entenda que é necessário diminuir tempos de comunicação ou algo semelhante.
 
 \subsubsection{Componentes}
-Cada broker executa dois serviços de websockets:
+Como se entende da introdução a esta secção cada broker garante dois serviços de websockets:
 
 \begin{itemize}
 \item um para comunicação com os clientes. Será identificado ao longo do relatório como \textbf{serviço de comunicação}).
 \item um para comunicação com os restantes brokers. Será identificado ao longo do relatório como \textbf{serviço de sincronização}).
 \end{itemize}
 
-Note-se que ainda que execute dois serviços de websockets que atendem em portas diferentes existe apenas uma thread por broker.
+Ainda que execute dois serviços de websockets que atendem em portas diferentes os mesmos são servidor pela mesma thread num ambiente orientado a eventos. Esta decisão advém do facto de que utilizado o MRI não existe concorrência real entre threads (a justificação deste facto está na secção~\ref{sec:gil}).
 
-O serviço de comunicação com os clientes é responsável por toda a comunicação com os clientes. Este servidor responde aos seguintes eventos de um cliente:
+O serviço de comunicação com os clientes responde aos seguintes eventos de um cliente:
+
 \begin{enumerate}
 \item \textbf{nova ligação}. O serviço é recolhe o próximo identificador único da base de dados e envia ao cliente. Este identificador serve apenas para o cliente poder assinar as suas mensagens ou reconhecer as mensagens de outro cliente (este identificador não tem utilidade ao servidor).
 \item \textbf{subscrição de canal}. O serviço procura o canal ou cria um novo e devolve ao cliente uma mensagem de sucesso.
 \item \textbf{remoção da subscrição de um canal}. O serviço remove a subscrição do cliente.
-\item \textbf{mensagem para diversos canais}. O serviço difunde a mensam pelos respectivos canais e submete para o serviço de sincronização.
+\item \textbf{mensagem para diversos canais}. O serviço difunde a mensagem pelos respetivos canais e submete para o serviço de sincronização.
 \end{enumerate}
 
 \hl{}
@@ -35,8 +37,8 @@ O serviço de comunicação com os clientes é responsável por toda a comunica�
 \begin{enumerate}
 \item Iniciar o servidor que recebe ligações dos restantes brokers.
 \item Registar o endereço do servidor na base de dado
-\item Criar a ligação a todos os brokers que estão activos na base de dados.
-\item Utilizar cada ligação para informar da actualização da lista de brokers.
+\item Criar a ligação a todos os brokers que estão ativos na base de dados.
+\item Utilizar cada ligação para informar da atualização da lista de brokers.
 \item Iniciar o servidor de websockets.
 \end{enumerate}
 

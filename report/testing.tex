@@ -1,8 +1,16 @@
 \section{Testes}
 
-De modo a validar os resultados apresentados pela solução faz-se uma análise comparativa com outras soluções no mercado. Como tal uma instalação do \textbf{RabbitMQ} com o plugin \textbf{RabbitMQ-Web-Stomp} será o contra exemplo para os testes realizados. É de notar que o que este plugin faz é expor o protocolo STOMP (Streaming Text Oriented Message Protocol) através de websockets. A solução proposta pelo ZeroMQ passa pelo mesmo mecanismo como tal não existe qualquer vantagem de escolha.
+No contexto deste problema o que se pretende é apresentar resultados quanto ao desempenho da aplicação. Como tal os testes foram realizados de forma a comparar a latência de receção das mensagens e débito de mensagens da aplicação por numero de clientes.
 
-RabbitMQ é um MOM open source que implementa o protocolo Advanced Message Queuing Protocol (AMQP). Com recurso 
+Para realizar os testes utilizaram-se duas máquinas. A primeira máquina, com um Intel Core i5 (dois cores) e velocidade 2.4GHz, executa três brokers. A segunda máquina, com um core de 800MHz, ficou responsável por executar os clientes.
 
-RabbitMQ is open source message broker software (i.e., message-oriented middleware) 
-that implements the Advanced Message Queuing Protocol (AMQP) standard.
+Facilmente se concluiu que estas não estão reunidas as melhores condições para validar o desempenho da aplicação:
+\begin{enumerate}
+\item O propósito dos brokers distribuídos pode ser justificado pelo facto de tirar partido de múltiplos cores no entanto o objetivo é permitir a execução em máquinas diferentes.
+\item Cada cliente de teste executa uma aplicação ruby, ou seja, dez clientes são dez processos numa máquina de core único, e assim sucessivamente. Ou seja tanto o desempenho dos clientes não é o adequado como o próprio tráfego todo para a mesma máquina condiciona os resultados.
+\end{enumerate}
+
+Um dos brokers é responsável por contabilizar o débito de mensagens. Quanto aos clientes apenas um envia mensagens e todos os restantes recebem. Dos que recebem um é responsável pelo cálculo da latência.
+
+Note-se que por cada mensagem submetida num broker é difundida pelos restantes, como tal mil mensagens são o equivalente a 2000 mensagens trocadas entre os brokers.
+Desta experiência as conclusões que podem tirar-se não são surpreendenes, o comportamento apresentado é o esperado e em termos de comparação de desemepenho seria necessário realizar os mesmos testes noutras aplicações.
