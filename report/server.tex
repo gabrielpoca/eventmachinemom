@@ -3,8 +3,6 @@
 Nesta secção não se pretende analisar o servidor mas os broker e as respectivas componentes, descrevendo as respectivas responsabilidades e comportamento.
 Relembra-se que o servidor é constituído por um numero aleatório de brokers e uma base de dados.
 
-\subsection{Broker}
-
 Os brokers são instâncias de uma aplicação desenvolvida em Ruby. Cada instância difere apenas nos endereços de comunicação: um para comunicação com clientes e outro para comunicação com os restantes brokers.
 Sendo que cada broker executa num processo Ruby justifica-se que na mesma máquina se executem diversos brokers de forma a tirar partido de paralelismo de processamento (ver secção~\ref{sec:ruby}).
 Note-se que cada broker executa numa thread apenas uma vez que a aplicação executa no no paradigma orientado a eventos fazendo uso da ferramenta EventMachine (ver secção~\ref{sec:eventmachine}).
@@ -12,7 +10,7 @@ Note-se que cada broker executa numa thread apenas uma vez que a aplicação exe
 Toda a comunicação do servidor funciona sobre websockets. Tanto com clientes como entre os brokers (à exceção evidente da comunicação com a base de dados). A decisão de utilizar websockets para comunicação entre os brokers é questionável, outros protocolos como o Advanced Message Queuing Protocol\footnote{http://en.wikipedia.org/wiki/Advanced\_Message\_Queuing\_Protocol} são uma solução eventualmente mais estável uma vez que é adotado por imensas ferramentas relacionadas.
 Contudo o único requisito quanto à comunicação entre brokers neste projeto passa por garantir comunicação não bloqueante, como tal websockets é uma tecnologia que se utiliza na comunicação com clientes e não existe impedimento ao uso na comunicação entre brokers Motivos que revelem outros protocolos como mais adequados podem surgir em situações que se entenda que é necessário diminuir tempos de comunicação ou algo semelhante.
 
-\subsubsection{Componentes}
+\subsection{Componentes}
 Como se entende da introdução a esta secção cada broker garante dois serviços de websockets:
 
 \begin{itemize}
@@ -22,23 +20,58 @@ Como se entende da introdução a esta secção cada broker garante dois serviç
 
 Ainda que execute dois serviços de websockets que atendem em portas diferentes os mesmos são servidor pela mesma thread num ambiente orientado a eventos. Esta decisão advém do facto de que utilizado o MRI não existe concorrência real entre threads (a justificação deste facto está na secção~\ref{sec:gil}).
 
+\subsubsection{Serviço de comunicação}
+
 O serviço de comunicação com os clientes responde aos seguintes eventos de um cliente:
 
 \begin{enumerate}
-\item \textbf{nova ligação}. O serviço é recolhe o próximo identificador único da base de dados e envia ao cliente. Este identificador serve apenas para o cliente poder assinar as suas mensagens ou reconhecer as mensagens de outro cliente (este identificador não tem utilidade ao servidor).
-\item \textbf{subscrição de canal}. O serviço procura o canal ou cria um novo e devolve ao cliente uma mensagem de sucesso.
-\item \textbf{remoção da subscrição de um canal}. O serviço remove a subscrição do cliente.
-\item \textbf{mensagem para diversos canais}. O serviço difunde a mensagem pelos respetivos canais e submete para o serviço de sincronização.
+\item \textbf{nova ligação}. O servidor armazena a ligação e devolve um identificador único ao cliente.
+\item \textbf{subscrição de canal}. O servidor procura o canal ou cria um novo e devolve ao cliente uma mensagem conforme sucedido.
+\item \textbf{cancelamento de canal}. O servidor remove a subscrição do cliente a um canal.
+\item \textbf{difusão de mensagens}. O servidor entrega uma mensagem nos canais pretendidos.
 \end{enumerate}
+
+
+\subsubsection{Serviço de sincronização}
+De modo a melhor explicar o comportamento desencadeado nas diferentes situações as próximas listas contém uma enumeração sequencial dos eventos no servidor para diferentes situações.
 
 \hl{}
 
-\textbf{Novo servidor}
+\textbf{Um broker inicía}\\
+Assumindo que já existem brokers ligados a próxima lista descreve o comportamento desencadeado no servidor com o iniciar do novo broker.
+
 \begin{enumerate}
-\item Iniciar o servidor que recebe ligações dos restantes brokers.
-\item Registar o endereço do servidor na base de dado
-\item Criar a ligação a todos os brokers que estão ativos na base de dados.
-\item Utilizar cada ligação para informar da atualização da lista de brokers.
-\item Iniciar o servidor de websockets.
+\item O novo broker inicía o serviço de sincronização.
+\item O novo broker regista o endereço na base de dados.
+\item O novo broker establece uma ligação a todos os restantes com base na lista de brokers activos que se encontra na base de dados.
+\item O novo broker envia uma mensagem de actualização a todos os brokers.
+\item Todos os brokers que recebem mensagem de actualização vão à base de dados verificar as divergências com a nova lista de brokers activos, removendo ou establecendo ligações consoante necessário.
+\item O novo broker carrega os canais com persistência a partir da base de dados. Os canais sem persistência não é necessário carregar.
+\item O novo broker inicía o serviço de comunicação com os clientes.
+\end{enumerate}
+
+No final deste processo o broker encontra-se operacional.
+
+\hl{}
+
+\textbf{Um broker desliga}\\
+Um broker pode desligar-se por falha ou porque simplesmente foi desligado pelo utilizador. Consoante o caso o comportamento varia.
+
+Quando um broker é desligado pelo utilizador a deteção de falha é automática uma vez que os restantes brokers activos são informados no canal de comunicação.
+
+\begin{enumerate}
+\item Um broker é desligado manualmente.
+\item Os restantes brokers removem o broker da lista local de brokers actvos.
+\item Um broker actualiza na base de dados o estado do broker que se desligou marcado como inactivo.
+\end{enumerate}
+
+O servidor reconhece uma falha num broker quando os restantes tentam enviar-lhe uma mensagem.
+
+\begin{enumerate}
+\item Um broker deixa de responder (falha).
+\item Um outro broker tenta difunidr uma mensagem ao broker que falhou e recebe um erro.
+\item O broker que recebe um erro remove o broker que falhou da sua lista local e marca o broker como inactivo na base de dados.
+\item O broker que recebe um erro informa os restantes da actualização na lista de brokers activos.
+\item Todos os brokers que recebem mensagem de actualização vão à base de dados verificar as divergências com a nova lista de brokers activos, removendo ou establecendo ligações consoante necessário.
 \end{enumerate}
 
