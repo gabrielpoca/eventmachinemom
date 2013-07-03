@@ -3,6 +3,45 @@ WebSockets é um protocolo que permite umq comunicação \textit{full-duplex} so
 Historicamente, ao criar uma aplicação \textit{web} em que fosse necessário uma comunicação bidireccional entre cliente e servidor, isso implicava um abuso do HTTP para o \textit{poll} do servidor para actualizações enquanto enviava notificações para chamadas HTTP distintas. Esta abordagem levantava vários problemas, entre os quais o facto de o servidor ser forçado a usar um número diferente de conexões TCP subjacentes para cada cliente assim como facto de o protocolo ter um grande \textit{overhead}.\\
 A solução mais simples para o problema seria usar apenas uma conxeão TCP para o tráfego em ambas as direcções. Essa solução é apresentada pela API fornecida pelos \textit{WebSockets} ao providenciar uma alternativa ao usual HTTP \textit{polling} para comunicação nas duas direcções.\\
 Esta técnica de \textit{WebSockets} pode ser usada para várias aplicações Web, especialmente as que necessitam de constante trocas de pacotes em tempo real como jogos on-line. O protocolo websocket é um tecnologia incluída no html5 e é suportada actualmente pela maior parte dos browsers. O seu esquema de de url é \textit{ws} ou \textit{wss} para comunicações seguras. \\
-O protocolo \textit{WebSocket} foi desenhado para suplantar as tecnologias de comunicação bidireccional existenetes que usam o HTTP como camada  de transporte. Essas tecnologias são implementadas como \textit{trade-offs} entre eficiência e confiança porque o HTTP não foi inicialmente desenhado para ser usado em conexões bidireccionais. O protocolo \textit{WebSocket} procura atingir os objectivos das tecnologias bidireccionais do HTTP no contexto do próprio HTTP, é desenhado para trablhar sobre as portas 80 e 443 do HHTP assim como suportar HTTP \textit{proxies} e intermediários, mesmo que isso implique uma maior complexidade.\\
+
+A conceção inicial da web considerou apenas a comunicação cliente-servidor num sentido apenas. Actualmente o HTML5 procura corrigir esta entrave, contudo ainda muitos projectos utilizam \textit{long-polling} para simular a comunicação cliente-servidor.\\
+
+Actualmente os browsers são actualizados regularmente e suportam a API de comunicação do HTML5.
+\subsubsection{\textit{Long pulling}}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{longpolling-architecture.png}
+\caption{Esquema de \textit{long pulling}}
+\label{fig:long_pulling}
+\end{figure}
+
+Um cliente (browser) envia por HTTP um pedido para o servidor com o identificador do utilizador (por exemplo) e do estado actual. No servidor é criado um processo que repetidamente verifica na base de dados se existe um estado novo. Quando existe um novo estado o cliente recebe e envia um novo pedido ao servidor.
+
+\subsubsection{\textit{Server-Sent Events}}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{sse-architecture.png}
+\caption{Esquema de \textit{server-sent events}}
+\label{fig:sse-architecture}
+\end{figure}
+
+Um cliente (browser) faz um pedido ao servidor. O servidor responde com o último estado na base de dados. O cliente recebe a resposta e em três segundos (por exemplo) envia um novo pedido.
+
+\subsubsection{Websockets}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{websocket-architecture.png}
+\caption{Esquema de \textit{websockets}}
+\label{fig:websockets-architecture}
+\end{figure}
+
+Um cliente notifica o servidor de websockets de um evento. O servidor imediamente notifica todos os clientes ativos do evento. Este processo pode envolver filtros e subscrição de eventos.
+
+
+
+
 
 

@@ -1,7 +1,8 @@
 \subsection{Message Broker}
 A definição mais aceite de um broker de um \textit{Message Broker} é a de um software de alto nível que lida com problemas relacionados com a integração da aplicação. É tipicamente construído sobre um MOM, que providencia a base da comunicação entre as aplicações, persistência de mensagens e garantias de entrega. Modelos de \textit{Message Broker}:
 \begin{itemize}
-\item \textbf{Com broker} O modelo tradicional de MOM que utiliza um broker. Funciona como uma arquitectura em estrela em que todas as aplicações são ligadas através do broker e nenhuma comunicação é feita directamente. Dessa maneira as aplicações não tem necessidade de ter conhecimento da localização umas das outras, apenas o endereço do broker. A comunicação não exige que elas coexistam no espaço e no tempo além do broker ser independente das aplicações. Este mecanismo exige no entanto uma imensa troca de mensagens pela rede e todas tem de passar pelo broker podendo a levar a que se torne num \textit{bottleneck} do sistema.
+\item \textbf{Com broker}\\
+ O modelo tradicional de MOM que utiliza um broker. Funciona como uma arquitectura em estrela em que todas as aplicações são ligadas através do broker e nenhuma comunicação é feita directamente. Dessa maneira as aplicações não tem necessidade de ter conhecimento da localização umas das outras, apenas o endereço do broker. A comunicação não exige que elas coexistam no espaço e no tempo além do broker ser independente das aplicações. Este mecanismo exige no entanto uma imensa troca de mensagens pela rede e todas tem de passar pelo broker podendo a levar a que se torne num \textit{bottleneck} do sistema.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.65\textwidth]{broker1.png}
