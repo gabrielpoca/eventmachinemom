@@ -12,7 +12,7 @@ No modelo \textit{publish/subscribe}, a aplicação emissora e receptora é livr
 \subsection{Modelos de Mensagens}
 \subsubsection{Broker}
 O modelo tradicional de MOM utiliza um \textit{Broker}. Funciona como uma arquitectura em estrela em que todas as aplicações são ligadas através do \textit{Broker} e nenhuma comunicação é feita directamente. Dessa maneira as aplicações não tem necessidade de ter conhecimento da localizações umas das outras, apenas o endereço do \textit{Broker} e a comunicação não exige que elas coexistam no espaço e no tempo. O \textit{Broker} é independente das aplicações, as falhas das mesmas não alteram o comportamente normal do \textit{Broker}. Este mecanismo exige no entanto uma imensa troca de mensagens pela rede e todas tem de passar pelo \textit{Broker} podendo a levar a que se torne num \textit{bottleneck} do sistema.\\
-\subsusbsection{Sem broker}
+\subsubsection{Sem broker}
 Este tipo de arquitecturas são ideias para sistemas com exigências de baixa latência de comunicação. No entanto como cada aplicação deve establecer uma ligação com as aplicações com que pretende comunicar e como tal deve conhecer o endereço das mesmas. Não sendo um problema num sistema simples, em sistemas com centenas de aplicações torna-se demasiado complexo.\\
 \subsubsection{Broker como serviço de Encaminhamento}
 Os \textit{brokers} são maioritariamente utilizados para encaminhamento de mensagens. O \textit{broker} deve conhecer a localização das aplicações e criar canais de comunicação. O \textit{broker} é utilizador como um serviço de encaminhamento. Se uma aplicação A pretende enviar uma mensagem a B, então deve questionar o \textit{broker} sobre a localização de B e estabelecer uma comunicação directa, não sobrecarregando o \textit{broker}.
