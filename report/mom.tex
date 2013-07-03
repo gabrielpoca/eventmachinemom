@@ -1,23 +1,18 @@
-\section{Message Oriented Middleware - MoM}
+\subsection{Message Oriented Middleware - MoM}
+
+\label{sec:mom}
+Entende-se por \textit{message oriented middleware} (MOM) como um método de comunicação entre componentes de sistemas distribuídos.\\
+
 Um \textit{Message Oriented Middleware}, ou simplesmente MoM é uma arquitectura que fornece uma camada entre as aplicaçães, substituindo a comunicação directa entre as mesmas por um sistema de troca de mensagens.\\
 Uma implementação \textit{MoM} oferece uma API que fornece um nível de abstracção capaz de aumentar a portabilidade, interoperabilidade e flexibilidades das aplicações que correm sobre a MOM.Os programadores são assim libertados dos detalhes das várias plataformas e protocolos, reduzindo a complexidade das comunicações das suas aplicações.\\
 A comunicação é efectuada através de troca de mensagens pela estrutura típica cliente/servidor(usando \textit{broadcast} ou \textit{multicast}) ou entre pilhas mantidas por gestores locais. Os gestores de pilhas são poderosos em termos de aplicabilidade e versatilidade.\\ 
 Os sistemas que usam MOM providenciam comunicação distribuída com base num modelo de interacção assíncrono. Os participantes do sistema não precisam de bloquear e esperar numa mensagem enviada, eles podem continuar a processar. Isso permite a entrega de mensagens quando o receptor ou emissor não estão activos ou disponíveis na altura da execução. Uma aplicação que envia mensagens não tem a garantia que a sua mensagem vai ser lida, nem  a garantia de quanto tempo vai demorar até que seja entregue. 
-\subsection{Ponto a Ponto}
-O modelo de mensagens ponto a ponto fornece uma troca assíncrona de mensagens entre aplicações. Neste modelo, as mensagens de um cliente produtor são encaminhadas para um cliente consumidor através de uma \textit{queue}. O mecanismo mais comun de \textit{queue} é uma \textit{queue} FIFO, na qual as mensagens são ordenadas conforme a ordem em que são recebidas pelo sistema de mensagens, assim que são consumidas são removidas do topo da \textit{queue}. 
+subsection{Padrões de troca de mensagens }
+\begin{itemize}
+\item \textbf{Ponto a Ponto}\\
+O modelo de mensagens ponto a ponto fornece uma troca assíncrona de mensagens entre aplicações. Neste modelo, as mensagens de um cliente produtor são encaminhadas para um cliente consumidor através de uma \textit{queue}. O mecanismo mais comum de \textit{queue} é uma \textit{queue} FIFO, na qual as mensagens são ordenadas conforme a ordem em que são recebidas pelo sistema de mensagens, assim que são consumidas são removidas do topo da \textit{queue}. 
 Apesar de não existir uma restrição para o número de clientes que podem publicar numa \textit{queue}, existe normalmente apenas um cliente consumidor, apesar de não ser um requisito muito rígido. Cada mensagem que é entregue apenas uma vez a apenas um receptor. O modelo permite que múltiplos receptores possam se conectar à queue, mas apenas um dos receptores vai consumir a mensagem. No modelo ponto a ponto, as mensagens são sempre entregues e são guardadas na \textit{queue} até que um consumidor estar preparado para a consumir.  
-\subsection{Publish/Subscribe}
+\item \textbf{Publish/Subscribe}
 O mecanismo  de \textit{Publish/Subscribe} é um mecanismo muito poderoso, usado para desiminar informação entre produtores e consumidores anonímos de mensagens. Podem ser mecanismos de distribuição de um para um ou de muitos para muitos, permitem a um simples consumidor enviar e receber mensagens de, potencialmente, centenas de milhares de utilizadores.\\
 No modelo \textit{publish/subscribe}, a aplicação emissora e receptora é livre da necessidade de perceber alguma coisa sobre a aplicação alvo.  Só tem necessidade de enviar a informação para um destino dentro da máquina \textit{publish/subscribe}. A máquina vai enviar prosteriormente para o consumidor. Os cliente produzem mensagens para um tópico especifico ou para um canal que são subscritos por cliente que pretendem consumir essas mensagens. O serviço mapeia as mensagens para os consumidores consoante os tópicos que eles estão interessados. Dentro do modelo \textit{publish/subscribe}, não existe a restrição no papel de um cliente, ele pode ser tanto consumidor como produtor de um tópico/canal.\\
-\subsection{Modelos de Mensagens}
-\subsubsection{Broker}
-O modelo tradicional de MOM utiliza um \textit{Broker}. Funciona como uma arquitectura em estrela em que todas as aplicações são ligadas através do \textit{Broker} e nenhuma comunicação é feita directamente. Dessa maneira as aplicações não tem necessidade de ter conhecimento da localizações umas das outras, apenas o endereço do \textit{Broker} e a comunicação não exige que elas coexistam no espaço e no tempo. O \textit{Broker} é independente das aplicações, as falhas das mesmas não alteram o comportamente normal do \textit{Broker}. Este mecanismo exige no entanto uma imensa troca de mensagens pela rede e todas tem de passar pelo \textit{Broker} podendo a levar a que se torne num \textit{bottleneck} do sistema.\\
-\subsubsection{Sem broker}
-Este tipo de arquitecturas são ideias para sistemas com exigências de baixa latência de comunicação. No entanto como cada aplicação deve establecer uma ligação com as aplicações com que pretende comunicar e como tal deve conhecer o endereço das mesmas. Não sendo um problema num sistema simples, em sistemas com centenas de aplicações torna-se demasiado complexo.\\
-\subsubsection{Broker como serviço de Encaminhamento}
-Os \textit{brokers} são maioritariamente utilizados para encaminhamento de mensagens. O \textit{broker} deve conhecer a localização das aplicações e criar canais de comunicação. O \textit{broker} é utilizador como um serviço de encaminhamento. Se uma aplicação A pretende enviar uma mensagem a B, então deve questionar o \textit{broker} sobre a localização de B e estabelecer uma comunicação directa, não sobrecarregando o \textit{broker}.
-\subsubsection{Broker Distribuído}
-Ainda que sem conseguir evitar uma imensa troca de mensagens pela rede, o uso de uma arquitectura distribúida do \textit{broker} pode atenuar o problema de  se tornar um motivo de congestionamento do sistema.
-
-
-
+\end{itemize}
